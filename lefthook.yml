@@ -1,10 +1,14 @@
-# pre-commit:
-#   commands:
-#     check:
-#       glob: "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}"
-#       run: pnpm eslint {staged_files}
-#       stage_fixed: true
-#     format:
-#       glob: "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}"
-#       run: pnpm prettier --write {staged_files}
-#       stage_fixed: true
+pre-commit:
+  commands:
+    eslintBackend:
+      glob: "./apps/tiqo-backend/*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}"
+      run: pnpm eslint {staged_files}
+      stage_fixed: true
+    formatBackend:
+      glob: "./apps/tiqo-backend/*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}"
+      run: pnpm prettier --write {staged_files}
+      stage_fixed: true
+    eslintFrontend:
+      glob: "./apps/tiqo-frontend/*.{vue,ts}"
+      run: pnpm eslint {staged_files}
+      stage_fixed: true
