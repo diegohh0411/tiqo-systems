@@ -1,0 +1,19 @@
+{
+  "name": "tiqo-systems",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "pnpm run --parallel --filter \"./apps/**\" dev",
+    "dev:back": "pnpm run --filter ./apps/tiqo-backend dev"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.9.0",
+  "devDependencies": {
+    "@graphql-codegen/cli": "^5.0.5",
+    "lefthook": "^1.11.11",
+    "typescript": "5.8.2"
+  }
+}

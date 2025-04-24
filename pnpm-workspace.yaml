@@ -1,0 +1,14 @@
+packages:
+  - apps/*
+
+onlyBuiltDependencies:
+  - '@apollo/protobufjs'
+  - '@nestjs/core'
+  - '@parcel/watcher'
+  - bcrypt
+  - better-sqlite3
+  - esbuild
+  - lefthook
+  - sharp
+  - unrs-resolver
+  - vue-demi
