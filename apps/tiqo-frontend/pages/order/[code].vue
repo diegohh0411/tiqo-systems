@@ -1,27 +1,27 @@
 <script setup lang="ts">
-  import { graphql } from '~/types/gql';
+import { graphql } from '~/codegen/gql';
 
-  const route = useRoute();
-  let code = route.params.code;
-  if (Array.isArray(code)) {
-    code = code[0];
-  }
+const route = useRoute();
+let code = route.params.code;
+if (Array.isArray(code)) {
+  code = code[0];
+}
 
-  console.log({ code })
+console.log({ code })
 
-  const { result, loading, error } = useQuery(
-    graphql(`
+const { result, loading, error } = useQuery(
+  graphql(`
       query ReadOrder($code: String!) {
         readOrder(code: $code) {
          ...OrderFragment
         }
       }
     `), {
-      code,
-    }
-  );
+  code,
+}
+);
 </script>
 
 <template>
-  <OrderDetail v-if="!loading && !error && result?.readOrder" :order="result.readOrder"  />
+  <OrderDetail v-if="!loading && !error && result?.readOrder" :order="result.readOrder" />
 </template>

@@ -30,7 +30,7 @@ import { debug, DebugAction } from "../../debug.logging";
 
 /**
  * Adapter for the Parrot POS API.
- * @description This class is responsible for syncing orders and order items from the Parrot POS API to the Vendure database.
+ * This class is responsible for syncing orders and order items from the Parrot POS API to the Vendure database.
  */
 @Injectable()
 export class ParrotPosAdapter {
@@ -42,7 +42,7 @@ export class ParrotPosAdapter {
     private productService: TiqoProductService,
     private productVariantService: TiqoProductVariantService,
     private channelService: TiqoChannelService,
-  ) {}
+  ) { }
   private static loggerCtx = "ParrotPosAdapter";
   private static baseUrl = "http://localhost:3232";
 
@@ -140,7 +140,7 @@ export class ParrotPosAdapter {
       await this.orderService.save(ctx, internalOrder);
       await this.tableService.repository(ctx).save(internalTable);
 
-      /**
+      /*
       if (externalOrder.status === "FINISHED") {
         await this.orderService.raw.transitionToState(
           ctx,
@@ -157,6 +157,19 @@ export class ParrotPosAdapter {
   static missingModifierPriceSku = "missing-modifier-price";
   /**
    Parrot POS has a peculiar system where each order line (order item) can have a small charge that modifies the base price. For example, the price of a 60 MXN coffee can me modified by choosing a 10 MXN milk. So each Parrot order item has a `unitPrice` and a `modifierPrice`. When building our Vendure OrderItemPriceCalculatorStrategy, we decided to calculate the price only upon the value of `unitPrice`. Thus, each Parrot order item with a non-zero modifierPrice will need to have a separate order line that represents the value of `modifierPrice` as if it were a `unitPrice`. This makes integration into Vendure easier.
+   */
+  /**
+   * Ensures that a missing modifier price is represented as an add-on order line in the system.
+   * If the parent order item has a modifier price that is not yet accounted for, this method creates or updates
+   * an order line to represent the missing modifier price.
+   *
+   * @param ctx - The request context containing information about the current channel and user.
+   * @param order - The internal order to which the add-on should be associated.
+   * @param esdpv - The product variant representing the missing modifier price.
+   * @param parentUuid - The UUID of the parent order item.
+   * @param orderItems - The list of all order items from the external system.
+   * @returns A promise that resolves when the add-on has been ensured.
+   * @throws StandardError If the parent order item is not found or other errors occur during processing.
    */
   private async makeSureAddOnExists(
     ctx: RequestContext,
@@ -213,11 +226,11 @@ export class ParrotPosAdapter {
     const existingLine = order.lines.find(
       (existingLine) =>
         existingLine.customFields.extSku ===
-          ParrotPosAdapter.missingModifierPriceSku &&
+        ParrotPosAdapter.missingModifierPriceSku &&
         existingLine.customFields.extParentOrderlineId === parentUuid,
     );
 
-    if (existingLine && existingLine.customFields.extId) {
+    if (existingLine) {
       debug(
         DebugAction.UPDATING,
         `existing line for missing modifier price`,
@@ -226,18 +239,17 @@ export class ParrotPosAdapter {
 
       const customFields: CustomOrderLineFields = {
         ...existingLine.customFields,
-
-        extUnitCost: totalMissingModifierPrice,
-        extUnitPrice: totalMissingModifierPrice,
-        extTotalPrice: totalMissingModifierPrice,
-        extTotal: totalMissingModifierPrice,
+        extUnitCost: totalMissingModifierPrice, // Cost per unit of the missing modifier
+        extUnitPrice: totalMissingModifierPrice, // Price per unit of the missing modifier
+        extTotalPrice: totalMissingModifierPrice * 1, // Total price for the missing modifier (quantity assumed as 1)
+        extTotal: totalMissingModifierPrice * 1, // Total cost for the missing modifier (quantity assumed as 1)
       };
 
       await this.orderService.raw.adjustOrderLine(
         ctx,
         order.id,
         existingLine.id,
-        1,
+        0,
         customFields,
       );
     } else {

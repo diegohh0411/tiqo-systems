@@ -5,7 +5,7 @@ const config: CodegenConfig = {
   documents: ["./components/**/*.vue", "./pages/**/*.vue"],
   ignoreNoDocuments: true, // for better experience with the watcher
   generates: {
-    "./types/gql/": {
+    "./codegen/gql/": {
       preset: "client",
       config: {
         useTypeImports: true,

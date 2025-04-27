@@ -1,4 +1,8 @@
-export const formatPrice = (cents: number, currencyCode: string) => {
+export const formatPrice = (cents: number, currencyCode?: string) => {
+  if (currencyCode === undefined) {
+    return (cents / 100).toFixed(2);
+  }
+
   const formatter = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: currencyCode,
