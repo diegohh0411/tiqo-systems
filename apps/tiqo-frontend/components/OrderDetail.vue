@@ -46,7 +46,8 @@ const toggleSelection = (internalId: string | null = null, externalId: string | 
     }
 
     gsap.to(parentLine, {
-      borderRadius: '0.25rem',
+      // borderRadius: '0.25rem',
+      paddingLeft: '0.5rem',
       ease: 'elastic',
     });
   } else {
@@ -56,7 +57,8 @@ const toggleSelection = (internalId: string | null = null, externalId: string | 
     }
 
     gsap.to(parentLine, {
-      borderRadius: '1.25rem',
+      // borderRadius: '1.25rem',
+      paddingLeft: '1rem',
       ease: 'elastic',
     });
   }
@@ -75,7 +77,14 @@ const getSelectedOrderlinesTotal = () => {
 </script>
 
 <template>
-  <div class="bg-gray-100 border border-gray-300 p-4 lg:p-6 w-full max-w-md grid grid-cols-6 gap-1 font-mono rounded">
+  <div
+    :class="`
+      grid grid-cols-6 gap-2 p-4
+      lg:p-6 w-full max-w-md
+      bg-gray-100 dark:bg-neutral-800 
+      border-neutral-300 dark:border-neutral-600
+      border font-mono rounded
+    `">
     <h3 class="col-span-full">Orden {{ order.code }}</h3>
     <p class="col-span-full text-xs mb-6">{{ formatTime(order.updatedAt) }}</p>
 
@@ -93,12 +102,14 @@ const getSelectedOrderlinesTotal = () => {
 
     <div
       v-for="(parentLine, parentIndex) in order.lines?.filter(l => l?.customFields?.extParentOrderlineId === null) || []"
-      :id="`orderline:${parentLine.id}`" :key="parentIndex" :class="[
-        'col-span-full grid grid-cols-6 gap-y-0 gap-x-1',
-        'border p-2 rounded cursor-pointer',
-        selectedOrderlines.includes(parentLine.id ?? '') ? 'border-blue-300 bg-blue-100' : 'border-gray-300 bg-gray-200 '
-
-      ]" @click="toggleSelection(parentLine.id, parentLine.customFields?.extId)">
+      :id="`orderline:${parentLine.id}`" :key="parentIndex" 
+      :class="`
+        col-span-full grid grid-cols-6 gap-y-0 gap-x-1
+        border p-2 rounded cursor-pointer
+        ${selectedOrderlines.includes(parentLine.id ?? '') ? 'border-blue-300 dark:border-blue-500 bg-blue-100 dark:bg-blue-800' : 'border-neutral-300 dark:border-neutral-600' } 
+        bg-neutral-200 dark:bg-neutral-700
+      `" 
+      @click="toggleSelection(parentLine.id, parentLine.customFields?.extId)">
       <div class="col-span-1">x{{ parentLine.quantity }}</div>
       <div class="col-span-3">{{ parentLine.customFields?.extName }}</div>
       <div class="col-span-2 flex justify-between"><span>$</span>{{ ((parentLine.customFields?.extUnitCost ||
@@ -125,8 +136,13 @@ const getSelectedOrderlinesTotal = () => {
 
     <hr class="col-span-full my-4 border-dashed border-gray-300">
 
-    <div class="col-span-full bg-blue-300 px-3 py-4 rounded text-center">
+    <p class="col-span-full text-xs">Haz click sobre los items de la orden para seleccionarlos y pagar.</p>
+    <TiqoButton
+      :disabled="selectedOrderlines.length == 0"
+      :class="`
+        col-span-full px-3 py-4 rounded text-center
+        ${
+        selectedOrderlines.length > 0 ? 'bg-blue-300 dark:bg-blue-700' : 'cursor-not-allowed bg-neutral-200 bg-neutral-700' }`">
       <p>Pagar ${{ getSelectedOrderlinesTotal() }} {{ order.currencyCode }}</p>
-    </div>
-  </div>
-</template>
+    </TiqoButton>
+</div></template>

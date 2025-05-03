@@ -18,6 +18,11 @@ export default defineNuxtConfig({
     clients: {
       default: {
         httpEndpoint: "http://localhost:3000/shop-api",
+        defaultOptions: {
+          query: {
+            fetchPolicy: "no-cache",
+          }
+        }
       },
     },
   },
