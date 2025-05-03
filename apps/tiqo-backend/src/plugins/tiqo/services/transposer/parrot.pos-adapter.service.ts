@@ -129,8 +129,8 @@ export class ParrotPosAdapter {
       );
 
       const internalTable = await this.tableService.findOneOrCreateIt(ctx, {
-        id: externalOrder.tableUuid,
-        name: externalOrder.tableName,
+        extId: externalOrder.tableUuid,
+        extName: externalOrder.tableName,
       });
 
       internalOrder.customFields.placedAt = internalTable;
@@ -249,7 +249,7 @@ export class ParrotPosAdapter {
         ctx,
         order.id,
         existingLine.id,
-        0,
+        1,
         customFields,
       );
     } else {

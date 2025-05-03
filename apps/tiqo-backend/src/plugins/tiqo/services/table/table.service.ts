@@ -12,7 +12,7 @@ import { debug, DebugAction } from "../../debug.logging";
 
 @Injectable()
 export class TableService {
-  constructor(private connection: TransactionalConnection) {}
+  constructor(private connection: TransactionalConnection) { }
   private loggerCtx = "TableService";
 
   repository(ctx: RequestContext) {
@@ -22,7 +22,8 @@ export class TableService {
   async createTable(ctx: RequestContext, dto: CreateTableDto) {
     const repository = this.repository(ctx);
     const newTable = repository.create({
-      name: dto.name,
+      extName: dto.extName,
+      extId: dto.extId,
       channels: [ctx.channel],
     });
 
@@ -82,19 +83,37 @@ export class TableService {
   }
 
   async findOneOrCreateIt(ctx: RequestContext, args: FindOneOrCreateItDto) {
+    debug(
+      DebugAction.EXECUTING,
+      `function 'findOneOrCreateIt' with args: ${JSON.stringify(args)}`,
+      this.loggerCtx,
+    )
+
     const repository = this.repository(ctx);
 
     const existingTable = await repository.findOne({
-      where: { id: args.id },
+      where: {
+        extId: args.extId
+      },
     });
 
     if (existingTable) {
+      debug(
+        DebugAction.FOUND,
+        `table with extId ${args.extId}`,
+        this.loggerCtx,
+      );
       return existingTable;
     }
 
+    debug(
+      DebugAction.DIDNT_FIND,
+      `table with extId ${args.extId}, creating it`,
+      this.loggerCtx,
+    );
     return await this.createTable(ctx, {
-      id: args.id,
-      name: args.name || "Mesa sin nombre",
+      extId: args.extId,
+      extName: args.extName || "Mesa sin nombre",
     });
   }
 

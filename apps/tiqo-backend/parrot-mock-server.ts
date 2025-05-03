@@ -96,7 +96,7 @@ app.get("/v1/order-items", (req: Request, res: Response) => {
         orderReference: "090125-P-0026",
         sku: "AR-1701321552624",
         productType: null,
-        uuid: "ae0fb538-3a38-4812-9549-d85f271f9420",
+        uuid: "ae0fb538-3a38-4812-9549-d85f271f9421",
         itemName: "Leche de Almendra",
         itemType: "ADD_ON",
         parentUuid: "6f855f9a-2707-43a2-ba6f-99501cf2c0cd",
