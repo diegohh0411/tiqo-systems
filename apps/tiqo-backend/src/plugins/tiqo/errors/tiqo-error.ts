@@ -15,6 +15,7 @@ export enum TiqoErrorCodes {
   INVALID_POS_PROVIDER = "IVPP", // The POS provider for the channel is not supported or undefined.
   UNREACHABLE_POS_PROVIDER = "URPP", // The POS provider for the channel is unreachable.
   INVALID_RESOURCE_REFERENCE = "IRRF", // The resource reference is invalid, it does not exist.
+  CURRENCY_CODE_MISMATCH = "CCMM", // An order line's currency code does not match the order's.
 
   // TiqoOrderItemPriceCalculationStrategy errors
   INVALID_EXTERNAL_ORDERLINE = "IEOL", // The External OrderLine is invalid.

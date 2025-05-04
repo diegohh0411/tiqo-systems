@@ -351,17 +351,17 @@ export class ParrotPosAdapter {
     const orderItemsSynced: ID[] = [];
 
     for (const orderReference in groupedOrderItems) {
-      const order = await this.orderService.findOne(ctx, orderReference, [
+      const currentOrder = await this.orderService.findOne(ctx, orderReference, [
         "lines",
       ]);
 
       debug(
         DebugAction.FOUND,
-        `order ${orderReference} with ${order?.lines.length} lines`,
+        `order ${orderReference} with ${currentOrder?.lines.length} lines`,
         ParrotPosAdapter.loggerCtx,
       );
 
-      if (!order) {
+      if (!currentOrder) {
         debug(
           DebugAction.DIDNT_FIND,
           `order ${orderReference}`,
@@ -383,7 +383,15 @@ export class ParrotPosAdapter {
           ParrotPosAdapter.loggerCtx,
         );
 
-        const existingLine = order.lines.find(
+        if (orderItem.currencyCode !== currentOrder.currencyCode) {
+          Logger.error(
+            `Currency code mismatch for order item ${orderItem.uuid}: expected ${currentOrder.currencyCode}, got ${orderItem.currencyCode}`,
+            ParrotPosAdapter.loggerCtx,
+          );
+          throw new StandardError(TiqoErrorCodes.CURRENCY_CODE_MISMATCH);
+        }
+
+        const existingLine = currentOrder.lines.find(
           (existingLine) => existingLine.customFields.extId === orderItem.uuid,
         );
 
@@ -410,7 +418,7 @@ export class ParrotPosAdapter {
 
           await this.orderService.raw.adjustOrderLine(
             ctx,
-            order.id,
+            currentOrder.id,
             existingLine.id,
             orderItem.quantity,
             customFields,
@@ -443,7 +451,7 @@ export class ParrotPosAdapter {
 
           await this.orderService.raw.addItemToOrder(
             ctx,
-            order.id,
+            currentOrder.id,
             esdpv.id,
             orderItem.quantity,
             customFields,
@@ -455,7 +463,7 @@ export class ParrotPosAdapter {
         if (orderItem.totalModifierPrice > 0) {
           await this.makeSureAddOnExists(
             ctx,
-            order,
+            currentOrder,
             esdpv,
             orderItem.uuid,
             groupedOrderItems[orderReference],

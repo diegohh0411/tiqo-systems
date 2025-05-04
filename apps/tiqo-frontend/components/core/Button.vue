@@ -5,6 +5,7 @@
 
     @mouseenter="onHover"
     @mouseleave="onLeave"
+    @click="onClick"
   >
     <slot>Default value</slot>
   </button>
@@ -21,24 +22,31 @@
 
   const buttonRef = ref<HTMLElement | null>(null);
 
+  const tl = gsap.timeline({
+    defaults: {
+      duration: 0.1,
+      ease: 'power4.out'
+    }
+  });
+
   const onHover = () => {
     console.log({ buttonRef });
     if (buttonRef.value && !props.disabled) {
-      gsap.to(buttonRef.value, {
+      tl.to(buttonRef.value, {
         scale: 1.02,
-        duration: 0.2,
-        ease: 'power1.out',
       });
     }
   }
 
   const onLeave = () => {
     if (buttonRef.value) {
-      gsap.to(buttonRef.value, {
+      tl.to(buttonRef.value, {
         scale: 1,
-        duration: 0.2,
-        ease: 'power1.out',
       });
     }
+  }
+
+  const onClick = () => {
+    
   }
 </script>
