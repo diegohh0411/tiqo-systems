@@ -3,7 +3,7 @@
     ref="orderline"
     class="`
       col-span-full 
-      grid grid-cols-6 gap-y-0 gap-x-1 p-2
+      grid grid-cols-7 gap-y-0 gap-x-1 p-2
       border border-neutral-300 dark:border-neutral-500
       rounded cursor-pointer
     `"
@@ -12,12 +12,14 @@
     }"
     @click="toggleSelection"
   >
+    <Icon v-if="selected" name="lucide:check-square" />
+    <Icon v-else name="lucide:square" />
     <div class="col-span-1">x{{ props.quantity }}</div>
-    <div class="col-span-3">{{  props.name }}</div>
+    <div class="col-span-3">{{  props.name || 'Sin nombre' }}</div>
     <div class="col-span-2 flex justify-between"><span>$</span>{{ formatPrice(props.unitCost * props.quantity) }}</div>
 
     <template v-for="(childItem) in props.childItems" :key="childItem.uuid">
-      <div class="col-span-3 col-start-2 opacity-50">{{ childItem.name }}</div>
+      <div class="col-span-3 col-start-3 opacity-50">{{ childItem.name || 'Sin nombre' }}</div>
       <div class="col-span-2 opacity-50 ml-auto"><span>+ {{ formatPrice(childItem.unitCost * childItem.quantity) }}</span></div>
     </template>
   </div>
@@ -30,12 +32,12 @@
     uuid: string;
     extId: string | null | undefined;
     quantity: number;
-    name: string;
+    name: string|null|undefined;
     unitCost: number;
 
     childItems: {
       uuid: string;
-      name: string;
+      name: string | null | undefined;
       quantity: number;
       unitCost: number;
     }[];

@@ -14,15 +14,15 @@ import type { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-
  * Learn more about it here: https://the-guild.dev/graphql/codegen/plugins/presets/preset-client#reducing-bundle-size
  */
 type Documents = {
-    "\n    fragment OrderFragment on Order {\n      code\n      updatedAt\n      total\n      currencyCode\n      lines {\n        id\n        customFields {\n          extId\n          extName\n          extSku\n          extUnitCost\n          extParentOrderlineId\n        }\n        linePrice\n        quantity\n      }\n    }\n  ": typeof types.OrderFragmentFragmentDoc,
     "\n    fragment TableFragment on Table {\n      id\n      extName\n      orders {\n        id\n        code\n        total\n        currencyCode\n        createdAt\n      }\n    }\n  ": typeof types.TableFragmentFragmentDoc,
+    "\n    fragment OrderFragment on Order {\n      code\n      updatedAt\n      totalWithTax\n      currencyCode\n      lines {\n        id\n        customFields {\n          extId\n          extName\n          extSku\n          extUnitCost\n          extParentOrderlineId\n        }\n        linePrice\n        quantity\n      }\n    }\n  ": typeof types.OrderFragmentFragmentDoc,
     "\n      query ReadOrder($code: String!) {\n        readOrder(code: $code) {\n         ...OrderFragment\n        }\n      }\n    ": typeof types.ReadOrderDocument,
     "\n    query ReadTable($id: ID!) {\n      readTable(id: $id) {\n        id\n        extName\n        orders {\n          id\n          code\n          total\n          currencyCode\n          createdAt\n        }\n      }\n    }\n  ": typeof types.ReadTableDocument,
     "\n    query ReadTables {\n      readTables {\n        id\n        extName\n      }\n    }\n  ": typeof types.ReadTablesDocument,
 };
 const documents: Documents = {
-    "\n    fragment OrderFragment on Order {\n      code\n      updatedAt\n      total\n      currencyCode\n      lines {\n        id\n        customFields {\n          extId\n          extName\n          extSku\n          extUnitCost\n          extParentOrderlineId\n        }\n        linePrice\n        quantity\n      }\n    }\n  ": types.OrderFragmentFragmentDoc,
     "\n    fragment TableFragment on Table {\n      id\n      extName\n      orders {\n        id\n        code\n        total\n        currencyCode\n        createdAt\n      }\n    }\n  ": types.TableFragmentFragmentDoc,
+    "\n    fragment OrderFragment on Order {\n      code\n      updatedAt\n      totalWithTax\n      currencyCode\n      lines {\n        id\n        customFields {\n          extId\n          extName\n          extSku\n          extUnitCost\n          extParentOrderlineId\n        }\n        linePrice\n        quantity\n      }\n    }\n  ": types.OrderFragmentFragmentDoc,
     "\n      query ReadOrder($code: String!) {\n        readOrder(code: $code) {\n         ...OrderFragment\n        }\n      }\n    ": types.ReadOrderDocument,
     "\n    query ReadTable($id: ID!) {\n      readTable(id: $id) {\n        id\n        extName\n        orders {\n          id\n          code\n          total\n          currencyCode\n          createdAt\n        }\n      }\n    }\n  ": types.ReadTableDocument,
     "\n    query ReadTables {\n      readTables {\n        id\n        extName\n      }\n    }\n  ": types.ReadTablesDocument,
@@ -45,11 +45,11 @@ export function graphql(source: string): unknown;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n    fragment OrderFragment on Order {\n      code\n      updatedAt\n      total\n      currencyCode\n      lines {\n        id\n        customFields {\n          extId\n          extName\n          extSku\n          extUnitCost\n          extParentOrderlineId\n        }\n        linePrice\n        quantity\n      }\n    }\n  "): (typeof documents)["\n    fragment OrderFragment on Order {\n      code\n      updatedAt\n      total\n      currencyCode\n      lines {\n        id\n        customFields {\n          extId\n          extName\n          extSku\n          extUnitCost\n          extParentOrderlineId\n        }\n        linePrice\n        quantity\n      }\n    }\n  "];
+export function graphql(source: "\n    fragment TableFragment on Table {\n      id\n      extName\n      orders {\n        id\n        code\n        total\n        currencyCode\n        createdAt\n      }\n    }\n  "): (typeof documents)["\n    fragment TableFragment on Table {\n      id\n      extName\n      orders {\n        id\n        code\n        total\n        currencyCode\n        createdAt\n      }\n    }\n  "];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n    fragment TableFragment on Table {\n      id\n      extName\n      orders {\n        id\n        code\n        total\n        currencyCode\n        createdAt\n      }\n    }\n  "): (typeof documents)["\n    fragment TableFragment on Table {\n      id\n      extName\n      orders {\n        id\n        code\n        total\n        currencyCode\n        createdAt\n      }\n    }\n  "];
+export function graphql(source: "\n    fragment OrderFragment on Order {\n      code\n      updatedAt\n      totalWithTax\n      currencyCode\n      lines {\n        id\n        customFields {\n          extId\n          extName\n          extSku\n          extUnitCost\n          extParentOrderlineId\n        }\n        linePrice\n        quantity\n      }\n    }\n  "): (typeof documents)["\n    fragment OrderFragment on Order {\n      code\n      updatedAt\n      totalWithTax\n      currencyCode\n      lines {\n        id\n        customFields {\n          extId\n          extName\n          extSku\n          extUnitCost\n          extParentOrderlineId\n        }\n        linePrice\n        quantity\n      }\n    }\n  "];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

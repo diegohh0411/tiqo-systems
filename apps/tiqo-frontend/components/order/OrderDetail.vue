@@ -6,7 +6,7 @@ const OrderFragment = graphql(`
     fragment OrderFragment on Order {
       code
       updatedAt
-      total
+      totalWithTax
       currencyCode
       lines {
         id
@@ -55,7 +55,7 @@ const selectedPrice = computed(() => {
 <template>
   <div
     :class="`
-      grid grid-cols-6 gap-2 p-4
+      grid grid-cols-7 gap-2 p-4
       lg:p-6 w-full max-w-md
       bg-gray-100 dark:bg-neutral-800 
       border-neutral-300 dark:border-neutral-600
@@ -65,7 +65,7 @@ const selectedPrice = computed(() => {
     <h3 class="col-span-full">Orden {{ order.code }}</h3>
     <p class="col-span-full text-xs mb-6">{{ formatTime(order.updatedAt) }}</p>
 
-    <p class="col-span-1 font-bold">
+    <p class="col-span-1 col-start-2  font-bold">
       Ctd.
     </p>
 
@@ -99,23 +99,16 @@ const selectedPrice = computed(() => {
 
       @selection-change="handleSelectionChange"
     />
-
-    <!--
+    
     <div class="col-span-full ml-auto mt-3">
       Total
     </div>
 
     <div class="col-span-full ml-auto text-xl flex gap-3 justify-between">
       <span>$</span>
-      <span>{{ formatPrice(order.total) }}</span>
+      <span>{{ formatPrice(order.totalWithTax) }}</span>
       <span>{{ order.currencyCode }}</span>
-    </div>
-
-    
-
-    <p class="col-span-full text-xs">Haz click sobre los items de la orden para seleccionarlos y pagar.</p>
-    
-    -->
+    </div> 
 
     <hr class="col-span-full my-4 border-dashed border-neutral-300 dark:border-neutral-600" >
 
@@ -124,7 +117,7 @@ const selectedPrice = computed(() => {
       :class="`
         col-span-full px-3 py-4 rounded text-center
         ${
-        selectedOrderlines.length > 0 ? 'bg-blue-300 dark:bg-blue-700' : 'cursor-not-allowed bg-neutral-200 bg-neutral-700' }`">
+        selectedOrderlines.length > 0 ? 'bg-blue-300 dark:bg-blue-700' : 'cursor-not-allowed  bg-neutral-200 dark:bg-neutral-700' }`">
       <p>Pagar {{ formatPrice(selectedPrice, order.currencyCode) }}</p>
     </CoreButton>
   </div>

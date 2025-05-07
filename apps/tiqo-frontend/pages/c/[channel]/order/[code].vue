@@ -7,8 +7,6 @@ if (Array.isArray(code)) {
   code = code[0];
 }
 
-console.log({ code })
-
 const { result, loading, error } = useQuery(
   graphql(`
       query ReadOrder($code: String!) {
