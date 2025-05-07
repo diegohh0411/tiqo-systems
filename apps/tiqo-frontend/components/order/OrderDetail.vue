@@ -16,6 +16,7 @@ const OrderFragment = graphql(`
           extSku
           extUnitCost
           extParentOrderlineId
+          hasBeenPaidFor
         }
         linePrice
         quantity
@@ -114,10 +115,11 @@ const selectedPrice = computed(() => {
 
     <CoreButton
       :disabled="selectedOrderlines.length == 0"
+      :effect="'expandWhileLoading'"
       :class="`
-        col-span-full px-3 py-4 rounded text-center
+        col-span-full
         ${
-        selectedOrderlines.length > 0 ? 'bg-blue-300 dark:bg-blue-700' : 'cursor-not-allowed  bg-neutral-200 dark:bg-neutral-700' }`">
+        selectedOrderlines.length > 0 ? 'bg-blue-400 dark:bg-blue-700' : 'cursor-not-allowed  bg-neutral-200 dark:bg-neutral-700' }`">
       <p>Pagar {{ formatPrice(selectedPrice, order.currencyCode) }}</p>
     </CoreButton>
   </div>
