@@ -1,5 +1,6 @@
 
 import type { UseQueryOptions } from "@vue/apollo-composable";
+import { graphql } from "~/codegen/gql";
 
 export const commonQueryOptions = () => {
   const route = useRoute();
@@ -14,3 +15,5 @@ export const commonQueryOptions = () => {
     prefetch: false,
   } as Partial<UseQueryOptions>;
 }
+
+export const cgql = graphql;

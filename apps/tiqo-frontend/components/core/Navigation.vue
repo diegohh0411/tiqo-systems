@@ -6,14 +6,13 @@
     <div
     :class="`
       flex items-center justify-between
-      w-full max-w-5xl mx-auto
-      page-padding-x
+      page-padding-x page-width
     `">
       <NuxtLink to="/" class="text-2xl font-bold">Tiqo</NuxtLink>
 
       <div class="flex items-center gap-4">
-        <NuxtLink to="/login" class="flex items-center gap-1"><Icon name="lucide:user" />  Inicia sesión</NuxtLink>
+        <ULink to="/login" class="text-sm">Iniciar sesión</ULink>
+        <ULink to="/signup" class="text-sm">Registrarse</ULink>
       </div>
-    </div>
   </div>
-</template>
+</div></template>

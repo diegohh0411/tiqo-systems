@@ -1,9 +1,9 @@
 <template>
   <div
   :class="`
-    flex flex-col gap-6 items-center
-    min-h-screen h-full w-screen 
-    bg-white dark:bg-neutral-900
+    flex flex-col gap-6 items-center justify-between
+    min-h-screen h-full w-screen
+    bg-white dark:bg-black
     text-neutral-900 dark:text-neutral-50
   `">
 
@@ -17,5 +17,7 @@
     `">
       <slot />
     </div>
+
+    <CoreFooter class="flex-end" />
   </div>
 </template>

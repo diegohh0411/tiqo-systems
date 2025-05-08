@@ -19,6 +19,7 @@ type Documents = {
     "\n      query ReadOrder($code: String!) {\n        readOrder(code: $code) {\n         ...OrderFragment\n        }\n      }\n    ": typeof types.ReadOrderDocument,
     "\n    query ReadTable($id: ID!) {\n      readTable(id: $id) {\n        id\n        extName\n        orders {\n          id\n          code\n          total\n          currencyCode\n          createdAt\n        }\n      }\n    }\n  ": typeof types.ReadTableDocument,
     "\n    query ReadTables {\n      readTables {\n        id\n        extName\n      }\n    }\n  ": typeof types.ReadTablesDocument,
+    "\n          mutation Login($username: String!, $password: String!, $rememberMe: Boolean!) {\n            login(username: $username, password: $password, rememberMe: $rememberMe) {\n              ... on CurrentUser {\n                id\n              }\n\n              ... on InvalidCredentialsError {\n                message\n              }\n            }\n          }\n      ": typeof types.LoginDocument,
 };
 const documents: Documents = {
     "\n    fragment TableFragment on Table {\n      id\n      extName\n      orders {\n        id\n        code\n        total\n        currencyCode\n        createdAt\n      }\n    }\n  ": types.TableFragmentFragmentDoc,
@@ -26,6 +27,7 @@ const documents: Documents = {
     "\n      query ReadOrder($code: String!) {\n        readOrder(code: $code) {\n         ...OrderFragment\n        }\n      }\n    ": types.ReadOrderDocument,
     "\n    query ReadTable($id: ID!) {\n      readTable(id: $id) {\n        id\n        extName\n        orders {\n          id\n          code\n          total\n          currencyCode\n          createdAt\n        }\n      }\n    }\n  ": types.ReadTableDocument,
     "\n    query ReadTables {\n      readTables {\n        id\n        extName\n      }\n    }\n  ": types.ReadTablesDocument,
+    "\n          mutation Login($username: String!, $password: String!, $rememberMe: Boolean!) {\n            login(username: $username, password: $password, rememberMe: $rememberMe) {\n              ... on CurrentUser {\n                id\n              }\n\n              ... on InvalidCredentialsError {\n                message\n              }\n            }\n          }\n      ": types.LoginDocument,
 };
 
 /**
@@ -62,6 +64,10 @@ export function graphql(source: "\n    query ReadTable($id: ID!) {\n      readTa
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n    query ReadTables {\n      readTables {\n        id\n        extName\n      }\n    }\n  "): (typeof documents)["\n    query ReadTables {\n      readTables {\n        id\n        extName\n      }\n    }\n  "];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n          mutation Login($username: String!, $password: String!, $rememberMe: Boolean!) {\n            login(username: $username, password: $password, rememberMe: $rememberMe) {\n              ... on CurrentUser {\n                id\n              }\n\n              ... on InvalidCredentialsError {\n                message\n              }\n            }\n          }\n      "): (typeof documents)["\n          mutation Login($username: String!, $password: String!, $rememberMe: Boolean!) {\n            login(username: $username, password: $password, rememberMe: $rememberMe) {\n              ... on CurrentUser {\n                id\n              }\n\n              ... on InvalidCredentialsError {\n                message\n              }\n            }\n          }\n      "];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

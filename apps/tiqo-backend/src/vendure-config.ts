@@ -17,6 +17,7 @@ import { AdminUiPlugin } from "@vendure/admin-ui-plugin";
 import "dotenv/config";
 import path from "path";
 import { TiqoPlugin } from "./plugins/tiqo/tiqo.plugin";
+import { Request, Response, NextFunction } from "express";
 
 const IS_DEV = process.env.APP_ENV === "dev";
 const serverPort = +process.env.PORT || 3000;
@@ -26,20 +27,32 @@ export const config: VendureConfig = {
     port: serverPort,
     adminApiPath: "admin-api",
     shopApiPath: "shop-api",
+
+    middleware: [
+      {
+        handler: (req: Request, res: Response, next: NextFunction) => {
+          console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`)
+          next();
+        },
+        route: "/",
+      }
+    ],
+
+
     // The following options are useful in development mode,
     // but are best turned off for production for security
     // reasons.
     ...(IS_DEV
       ? {
-          adminApiPlayground: {
-            settings: { "request.credentials": "include" },
-          },
-          adminApiDebug: true,
-          shopApiPlayground: {
-            settings: { "request.credentials": "include" },
-          },
-          shopApiDebug: true,
-        }
+        adminApiPlayground: {
+          settings: { "request.credentials": "include" },
+        },
+        adminApiDebug: true,
+        shopApiPlayground: {
+          settings: { "request.credentials": "include" },
+        },
+        shopApiDebug: true,
+      }
       : {}),
   },
   authOptions: {

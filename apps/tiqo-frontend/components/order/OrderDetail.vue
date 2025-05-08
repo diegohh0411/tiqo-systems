@@ -58,7 +58,6 @@ const selectedPrice = computed(() => {
     :class="`
       grid grid-cols-7 gap-2 p-4
       lg:p-6 w-full max-w-md
-      surface
       border font-mono rounded
   `">
   
