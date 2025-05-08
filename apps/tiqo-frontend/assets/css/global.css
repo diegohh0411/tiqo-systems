@@ -1,0 +1,22 @@
+@import "tailwindcss";
+@import "@nuxt/ui";
+
+.border {
+  @apply border-neutral-300 dark:border-neutral-600
+}
+
+.surface {
+  @apply bg-neutral-100 dark:bg-neutral-800
+}
+
+h1 {
+  @apply font-bold text-4xl;
+}
+
+h2 {
+  @apply font-bold text-2xl;
+}
+
+h3 {
+  @apply font-bold text-xl;
+}

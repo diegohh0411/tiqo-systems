@@ -3,6 +3,17 @@ export default defineNuxtConfig({
   compatibilityDate: "2024-11-01",
   devtools: { enabled: true },
 
+  css: ["~/assets/css/global.css"],
+
+  postcss: {
+    plugins: {
+      "@tailwindcss/postcss": {
+        config: "./tailwind.config.ts",
+      },
+      autoprefixer: {},
+    },
+  },
+
   modules: [
     "@nuxt/eslint",
     "@nuxt/fonts",
@@ -11,7 +22,7 @@ export default defineNuxtConfig({
     "@nuxt/scripts",
     "@nuxt/test-utils",
     "@nuxtjs/apollo",
-    "@nuxtjs/tailwindcss",
+    "@nuxt/ui"
   ],
 
   apollo: {
@@ -23,18 +34,6 @@ export default defineNuxtConfig({
             fetchPolicy: "no-cache",
           }
         }
-      },
-    },
-  },
-
-  tailwindcss: {
-    config: {
-      theme: {
-        extend: {
-          fontFamily: {
-            mono: ["JetBrains Mono", "monospace"],
-          },
-        },
       },
     },
   },

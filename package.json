@@ -5,12 +5,13 @@
   "main": "index.js",
   "scripts": {
     "dev": "pnpm run --parallel --filter \"./apps/**\" dev",
+    "dev:front": "pnpm run --filter ./apps/tiqo-frontend dev",
     "dev:back": "pnpm run --filter ./apps/tiqo-backend dev"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "packageManager": "pnpm@10.9.0",
+  "packageManager": "pnpm@10.10.0",
   "devDependencies": {
     "@graphql-codegen/cli": "^5.0.5",
     "lefthook": "^1.11.11",

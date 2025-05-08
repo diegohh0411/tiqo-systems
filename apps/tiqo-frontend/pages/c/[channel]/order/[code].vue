@@ -16,10 +16,12 @@ const { result, loading, error } = useQuery(
       }
     `), {
   code,
-}
-);
+});
 </script>
 
 <template>
-  <OrderDetail v-if="!loading && !error && result?.readOrder" :order="result.readOrder" />
+  <OrderDetail 
+    v-if="!loading && !error && result?.readOrder" :order="result.readOrder" 
+    class="mx-auto"  
+  />
 </template>

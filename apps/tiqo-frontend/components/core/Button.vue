@@ -1,7 +1,7 @@
 <template>
   <button
     ref="buttonRef"
-    class="flex items-center justify-center px-3 py-4 gap-2 rounded"
+    class="flex items-center justify-center px-3 py-4 gap-2 rounded cursor-pointer"
     :class="props.class"
 
     @mouseenter="onHover"
