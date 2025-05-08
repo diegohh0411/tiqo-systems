@@ -58,8 +58,7 @@ const selectedPrice = computed(() => {
     :class="`
       grid grid-cols-7 gap-2 p-4
       lg:p-6 w-full max-w-md
-      bg-gray-100 dark:bg-neutral-800 
-      border-neutral-300 dark:border-neutral-600
+      surface
       border font-mono rounded
   `">
   
@@ -119,7 +118,7 @@ const selectedPrice = computed(() => {
       :class="`
         col-span-full
         ${
-        selectedOrderlines.length > 0 ? 'bg-blue-400 dark:bg-blue-700' : 'cursor-not-allowed  bg-neutral-200 dark:bg-neutral-700' }`">
+        selectedOrderlines.length > 0 ? 'bg-blue-400 text-white dark:bg-blue-700' : 'cursor-not-allowed  bg-neutral-200 dark:bg-neutral-700' }`">
       <p>Pagar {{ formatPrice(selectedPrice, order.currencyCode) }}</p>
     </CoreButton>
   </div>

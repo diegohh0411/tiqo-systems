@@ -37,7 +37,6 @@
   });
 
   const onHover = () => {
-    console.log({ buttonRef });
     if (buttonRef.value && !props.disabled) {
       tl.to(buttonRef.value, {
         scale: 1.04,

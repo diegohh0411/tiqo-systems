@@ -29,9 +29,9 @@
   <div 
   :class="`
     grid lg:grid-cols-2
+    w-full
     rounded-lg overflow-hidden
     border
-    w-full max-w-4xl mx-auto
   `">
       <UForm
         :schema="formSchema"
