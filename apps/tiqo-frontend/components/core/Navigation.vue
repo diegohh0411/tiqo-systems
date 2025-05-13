@@ -10,9 +10,41 @@
     `">
       <NuxtLink to="/" class="text-2xl font-bold">Tiqo</NuxtLink>
 
-      <div class="flex items-center gap-4">
-        <ULink to="/login" class="text-sm">Iniciar sesión</ULink>
-        <ULink to="/signup" class="text-sm">Registrarse</ULink>
-      </div>
+      <UDropdownMenu :items="navItems">
+        <UButton icon="lucide-menu" color="neutral" variant="outline" class="cursor-pointer" size="xl" />
+      </UDropdownMenu>
+    </div>
   </div>
-</div></template>
+</template>
+
+<script setup lang="ts">
+  import type { DropdownMenuItem } from '#ui/types';
+
+  const navItems = ref<DropdownMenuItem[][]>(
+    [
+      [
+        {
+          label: `¡Hola!`,
+          type: 'label'
+        },
+        {
+          label: 'Principal',
+          icon: 'lucide-home',
+          to: '/',
+        }
+      ],
+      [
+        {
+          label: 'Login',
+          icon: 'lucide-user',
+          to: '/login',
+        },
+        {
+          label: 'Sign up',
+          icon: 'lucide-plus',
+          to: '/signup',
+        },
+      ]
+    ]
+  );
+</script>

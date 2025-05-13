@@ -29,6 +29,7 @@
             login(username: $username, password: $password, rememberMe: $rememberMe) {
               ... on CurrentUser {
                 id
+                identifier
               }
 
               ... on InvalidCredentialsError {
@@ -45,7 +46,7 @@
       rememberMe: event.data.rememberMe,
     })
 
-    onDone(({ data }) => {
+    onDone(async ({ data }) => {
       loading.value = false;
 
       if (data?.login.__typename === 'InvalidCredentialsError') {
@@ -55,13 +56,15 @@
           color: 'error',
         });
         return;
+      } else if (data?.login.__typename === 'CurrentUser') {
+        toast.add({
+          title: 'Éxito',
+          description: JSON.stringify(data?.login),
+          color: 'success',
+        });
       }
 
-      toast.add({
-        title: 'Éxito',
-        description: JSON.stringify(data),
-        color: 'success',
-      })
+      
     })
   }
 </script>

@@ -3,13 +3,15 @@ export const description = 'A login page with form and image.'
 </script>
 
 <script setup lang="ts">
-import LoginForm from '@/components/shadcn/LoginForm.vue'
+  definePageMeta({
+    middleware: ['authenticated']
+  })
 </script>
 
 <template>
   <div class="bg-muted flex min-h-svh flex-col items-center justify-center p-6 md:p-10">
     <div class="w-full max-w-sm md:max-w-3xl">
-      <LoginForm />
+      Dashboard
     </div>
   </div>
 </template>

@@ -22,13 +22,16 @@ export default defineNuxtConfig({
     "@nuxt/scripts",
     "@nuxt/test-utils",
     "@nuxtjs/apollo",
-    "@nuxt/ui"
+    "@nuxt/ui",
   ],
 
   apollo: {
     clients: {
       default: {
         httpEndpoint: "http://localhost:3000/shop-api",
+        httpLinkOptions: {
+          credentials: "include",
+        },
         defaultOptions: {
           query: {
             fetchPolicy: "no-cache",
