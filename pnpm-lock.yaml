@@ -35,6 +35,9 @@ importers:
       '@vendure/email-plugin':
         specifier: 3.2.3
         version: 3.2.3
+      '@vendure/harden-plugin':
+        specifier: ^3.3.0
+        version: 3.3.0(graphql@16.10.0)
       axios:
         specifier: ^1.8.4
         version: 1.8.4
@@ -2571,6 +2574,9 @@ packages:
   '@vendure/email-plugin@3.2.3':
     resolution: {integrity: sha512-P8+5lQmGbAYF9gdWkSPAX9yZ7vreR7ERM6YRRpAJO1XNKK7/HTxZkSFki81q7xXgkWPHYNaLDfbKXxIcDc54ew==}
 
+  '@vendure/harden-plugin@3.3.0':
+    resolution: {integrity: sha512-L28sWvq4jBin4HOAlK0llK0j7kHNLYZjOK8ctoTTg+r0GzTz244S/e9R8okpWuD6WZ+6X3LyXoxEpg//prQBDQ==}
+
   '@vercel/nft@0.27.7':
     resolution: {integrity: sha512-FG6H5YkP4bdw9Ll1qhmbxuE8KwW2E/g8fJpM183fWQLeVDGqzeywMIeJ9h2txdWZ03psgWMn6QymTxaDLmdwUg==}
     engines: {node: '>=16'}
@@ -4501,6 +4507,11 @@ packages:
   graphql-fields@2.0.3:
     resolution: {integrity: sha512-x3VE5lUcR4XCOxPIqaO4CE+bTK8u6gVouOdpQX9+EKHr+scqtK5Pp/l8nIGqIpN1TUlkKE6jDCCycm/WtLRAwA==}
 
+  graphql-query-complexity@0.12.0:
+    resolution: {integrity: sha512-fWEyuSL6g/+nSiIRgIipfI6UXTI7bAxrpPlCY1c0+V3pAEUo1ybaKmSBgNr1ed2r+agm1plJww8Loig9y6s2dw==}
+    peerDependencies:
+      graphql: ^14.6.0 || ^15.0.0 || ^16.0.0
+
   graphql-request@6.1.0:
     resolution: {integrity: sha512-p+XPfS4q7aIpKVcgmnZKhMNqhltk20hfXtkaIkTfjjmiKMJ5xrt5c743cL03y/K7y1rg3WrIC49xGiEQ4mxdNw==}
     peerDependencies:
@@ -5258,6 +5269,10 @@ packages:
 
   lodash.defaults@4.2.0:
     resolution: {integrity: sha512-qjxPLHd3r5DnsdGacqOMU6pb/avJzdh9tFX2ymgoZE27BmjXrNy/y4LoaiTeAb+O3gL8AfpJGtqfX/ae2leYYQ==}
+
+  lodash.get@4.4.2:
+    resolution: {integrity: sha512-z+Uw/vLuy6gQe8cfaFWD7p0wVv8fJl3mbzXh33RS+0oW2wvUqiRXiQ69gLWSLpgB5/6sU+r6BlQR0MBILadqTQ==}
+    deprecated: This package is deprecated. Use the optional chaining (?.) operator instead.
 
   lodash.isarguments@3.1.0:
     resolution: {integrity: sha512-chi4NHZlZqZD18a0imDHnZPrDeBbTtVN7GXMwuGdRH9qotxAjYs3aVLKc7zNOG9eddR5Ksd8rvFEBc9SsggPpg==}
@@ -11034,6 +11049,12 @@ snapshots:
       - encoding
       - supports-color
 
+  '@vendure/harden-plugin@3.3.0(graphql@16.10.0)':
+    dependencies:
+      graphql-query-complexity: 0.12.0(graphql@16.10.0)
+    transitivePeerDependencies:
+      - graphql
+
   '@vercel/nft@0.27.7(rollup@4.40.0)':
     dependencies:
       '@mapbox/node-pre-gyp': 1.0.11
@@ -13298,6 +13319,11 @@ snapshots:
 
   graphql-fields@2.0.3: {}
 
+  graphql-query-complexity@0.12.0(graphql@16.10.0):
+    dependencies:
+      graphql: 16.10.0
+      lodash.get: 4.4.2
+
   graphql-request@6.1.0(graphql@16.10.0):
     dependencies:
       '@graphql-typed-document-node/core': 3.2.0(graphql@16.10.0)
@@ -14044,6 +14070,8 @@ snapshots:
   lodash.debounce@4.0.8: {}
 
   lodash.defaults@4.2.0: {}
+
+  lodash.get@4.4.2: {}
 
   lodash.isarguments@3.1.0: {}
 
