@@ -85,7 +85,7 @@ export const config: VendureConfig = {
   },
 
   logger: new DefaultLogger({
-    level: envConfig.ENV === "development" ? LogLevel.Debug : LogLevel.Error,
+    level: envConfig.ENV === "development" ? LogLevel.Debug : LogLevel.Info,
   }),
   // When adding or altering custom field definitions, the database will
   // need to be updated. See the "Migrations" section in README.md.
