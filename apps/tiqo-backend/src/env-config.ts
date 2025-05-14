@@ -8,7 +8,6 @@ const envSchema = z.object({
   SUPERADMIN_USERNAME: z.string().min(2).max(100),
   SUPERADMIN_PASSWORD: z.string().min(6).max(100),
 
-  DATABASE_TYPE: z.enum(['better-sqlite3', 'postgres']),
   DATABASE_URL: z.string(),
 
   COOKIE_SECRET: z.string().min(32).max(100),
@@ -20,7 +19,11 @@ if (!env.success) {
   console.error('Invalid environment variables', env.error.format());
   throw new Error('Invalid environment variables');
 } else {
-  console.log(`Valid environment variables, with environment '${env.data.ENV}' and port '${env.data.PORT}'`);
+  console.log(`Valid environment variables, with some configurations being:\n '${JSON.stringify({
+    ENV: env.data.ENV,
+    PORT: env.data.PORT,
+    DATABASE_URL: env.data.DATABASE_URL,
+  })}'`);
 }
 
 export const { data: envConfig } = env;

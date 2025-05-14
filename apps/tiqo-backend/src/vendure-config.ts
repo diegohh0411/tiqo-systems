@@ -52,28 +52,14 @@ export const config: VendureConfig = {
       secret: envConfig.COOKIE_SECRET,
     },
   },
-  /**
+
   dbConnectionOptions: {
     type: "postgres",
-    // See the README.md "Migrations" section for an explanation of
-    // the `synchronize` and `migrations` options.
-    url: envConfig.DB_URL,
-    ssl: true,
-
-    synchronize: true,
+    synchronize: envConfig.ENV !== "production",
+    ssl: { rejectUnauthorized: false },
     migrations: [path.join(__dirname, "./migrations/*.+(js|ts)")],
-    logging: false,
-    database: "vendure",
-  },*/
-
-  dbConnectionOptions: {
-    type: envConfig.DATABASE_TYPE,
-    // See the README.md "Migrations" section for an explanation of
-    // the `synchronize` and `migrations` options.
-    synchronize: envConfig.ENV === "development",
-    migrations: [path.join(__dirname, "./migrations/*.+(js|ts)")],
-    logging: false,
-    database: envConfig.DATABASE_URL,
+    logging: envConfig.ENV !== "production",
+    url: envConfig.DATABASE_URL,
   },
 
   entityOptions: {
@@ -85,7 +71,7 @@ export const config: VendureConfig = {
   },
 
   logger: new DefaultLogger({
-    level: envConfig.ENV === "development" ? LogLevel.Debug : LogLevel.Info,
+    level: envConfig.ENV === "production" ? LogLevel.Info : LogLevel.Debug,
   }),
   // When adding or altering custom field definitions, the database will
   // need to be updated. See the "Migrations" section in README.md.
