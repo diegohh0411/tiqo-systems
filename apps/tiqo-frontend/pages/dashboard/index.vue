@@ -9,9 +9,12 @@ export const description = 'A login page with form and image.'
 </script>
 
 <template>
-  <div class="bg-muted flex min-h-svh flex-col items-center justify-center p-6 md:p-10">
-    <div class="w-full max-w-sm md:max-w-3xl">
-      Dashboard
+  <div class="flex flex-col gap-1">
+    <h3>Bienvenido</h3>
+
+    <div class="flex items-center gap-1">
+      <UIcon name="lucide-circle-user" class="text-xl" />
+      <p>{{ currentUser.identifier }}</p>
     </div>
   </div>
 </template>

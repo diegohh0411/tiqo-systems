@@ -10,7 +10,7 @@
     `">
       <NuxtLink to="/" class="text-2xl font-bold">Tiqo</NuxtLink>
 
-      <UDropdownMenu :items="navItems">
+      <UDropdownMenu :items="navItems" :ui="{ content: 'min-w-64'}" :content="{ align: 'end' }">
         <UButton icon="lucide-menu" color="neutral" variant="outline" class="cursor-pointer" size="xl" />
       </UDropdownMenu>
     </div>
@@ -20,31 +20,46 @@
 <script setup lang="ts">
   import type { DropdownMenuItem } from '#ui/types';
 
-  const navItems = ref<DropdownMenuItem[][]>(
-    [
+  const navItems = computed<DropdownMenuItem[][]>(() => {
+    return [
       [
         {
-          label: `¡Hola!`,
-          type: 'label'
+          label: '¡Hola!',
+          type: "label"
         },
+        ...(isLoggedIn.value ? [
+          {
+            label: currentUser.value.identifier,
+            to: '/dashboard',
+            icon: 'lucide-user',
+          }
+        ] : [])
+      ],
+      [
         {
           label: 'Principal',
           icon: 'lucide-home',
           to: '/',
-        }
-      ],
-      [
-        {
+        },
+        ...(isLoggedIn.value ?  [
+          {
+            label: "Cerrar sesión",
+            icon: 'lucide-log-out',
+            to: '/logout'
+          }
+        ] : [
+          {
           label: 'Login',
           icon: 'lucide-user',
           to: '/login',
-        },
-        {
-          label: 'Sign up',
-          icon: 'lucide-plus',
-          to: '/signup',
-        },
+          },
+          {
+            label: 'Sign up',
+            icon: 'lucide-plus',
+            to: '/signup',
+          }
+        ]),
       ]
-    ]
-  );
+    ];
+  });
 </script>
