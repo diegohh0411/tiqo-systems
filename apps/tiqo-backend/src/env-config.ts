@@ -19,6 +19,8 @@ const env = envSchema.safeParse(process.env);
 if (!env.success) {
   console.error('Invalid environment variables', env.error.format());
   throw new Error('Invalid environment variables');
+} else {
+  console.log(`Valid environment variables, with environment '${env.data.ENV}' and port '${env.data.PORT}'`);
 }
 
 export const { data: envConfig } = env;
