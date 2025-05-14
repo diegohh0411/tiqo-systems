@@ -22,7 +22,7 @@ import { envConfig } from "./env-config";
 
 export const config: VendureConfig = {
   apiOptions: {
-    port: envConfig.APP_PORT,
+    port: envConfig.PORT,
     adminApiPath: "admin-api",
     shopApiPath: "shop-api",
 
@@ -30,7 +30,7 @@ export const config: VendureConfig = {
     // The following options are useful in development mode,
     // but are best turned off for production for security
     // reasons.
-    ...(envConfig.APP_ENV === "development"
+    ...(envConfig.ENV === "development"
       ? {
         adminApiPlayground: {
           settings: { "request.credentials": "include" },
@@ -70,7 +70,7 @@ export const config: VendureConfig = {
     type: envConfig.DATABASE_TYPE,
     // See the README.md "Migrations" section for an explanation of
     // the `synchronize` and `migrations` options.
-    synchronize: envConfig.APP_ENV === "development",
+    synchronize: envConfig.ENV === "development",
     migrations: [path.join(__dirname, "./migrations/*.+(js|ts)")],
     logging: false,
     database: envConfig.DATABASE_URL,
@@ -85,7 +85,7 @@ export const config: VendureConfig = {
   },
 
   logger: new DefaultLogger({
-    level: envConfig.APP_ENV === "development" ? LogLevel.Debug : LogLevel.Error,
+    level: envConfig.ENV === "development" ? LogLevel.Debug : LogLevel.Error,
   }),
   // When adding or altering custom field definitions, the database will
   // need to be updated. See the "Migrations" section in README.md.
@@ -93,7 +93,7 @@ export const config: VendureConfig = {
   plugins: [
     HardenPlugin.init({
       maxQueryComplexity: 500,
-      apiMode: envConfig.APP_ENV === "development" ? 'dev' : 'prod',
+      apiMode: envConfig.ENV === "development" ? 'dev' : 'prod',
     }),
     AssetServerPlugin.init({
       route: "assets",
@@ -126,9 +126,9 @@ export const config: VendureConfig = {
     }),
     AdminUiPlugin.init({
       route: "admin",
-      port: envConfig.APP_PORT + 2,
+      port: envConfig.PORT + 2,
       adminUiConfig: {
-        apiPort: envConfig.APP_PORT,
+        apiPort: envConfig.PORT,
       },
     }),
     TiqoPlugin.init({}),

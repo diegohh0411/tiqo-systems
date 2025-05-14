@@ -2,8 +2,8 @@
 import { z } from 'zod';
 
 const envSchema = z.object({
-  APP_ENV: z.enum(['development', 'production', 'staging']),
-  APP_PORT: z.number({ coerce: true }).min(1).max(65535).default(3000),
+  ENV: z.enum(['development', 'production', 'staging']),
+  PORT: z.number({ coerce: true }).min(1).max(65535),
 
   SUPERADMIN_USERNAME: z.string().min(2).max(100),
   SUPERADMIN_PASSWORD: z.string().min(6).max(100),
