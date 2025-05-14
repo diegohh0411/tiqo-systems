@@ -12,8 +12,6 @@ const envSchema = z.object({
   DATABASE_URL: z.string(),
 
   COOKIE_SECRET: z.string().min(32).max(100),
-
-  NODE_VERSION: z.string().regex(/^\d+\.\d+\.\d+$/).default('20.19.0'),
 });
 
 const env = envSchema.safeParse(process.env);
