@@ -11,11 +11,11 @@
     <h3 class="col-span-full">Orden {{ pfs.order.code }}</h3>
     <p class="col-span-full text-xs mb-6">{{ formatTime(pfs.order.updatedAt) }}</p>
 
-    <p class="col-span-1 col-start-2  font-bold">
+    <p class="col-span-1 col-start-1  font-bold">
       Ctd.
     </p>
 
-    <p class="col-span-3 font-bold">
+    <p class="col-span-4 font-bold">
       Item
     </p>
 

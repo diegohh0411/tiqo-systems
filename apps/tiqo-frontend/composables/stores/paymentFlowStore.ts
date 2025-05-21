@@ -4,6 +4,7 @@ import type { OrderFragmentFragment } from "~/codegen/gql/graphql";
 export enum PaymentStages {
   SELECTING_ORDERLINES = 'SELECTING_ORDERLINES',
   SELECTING_TIP = 'SELECTING_TIP',
+  VIEWING_SUMMARY = 'VIEWING_SUMMARY',
 }
 
 interface PaymentFlowState {
@@ -61,11 +62,15 @@ export const usePaymentFlowStore = defineStore("paymentFlow", {
     nextStage() {
       if (this.stage === PaymentStages.SELECTING_ORDERLINES) {
         this.stage = PaymentStages.SELECTING_TIP;
+      } else if (this.stage === PaymentStages.SELECTING_TIP) {
+        this.stage = PaymentStages.VIEWING_SUMMARY;
       }
     },
     prevStage() {
       if (this.stage === PaymentStages.SELECTING_TIP) {
         this.stage = PaymentStages.SELECTING_ORDERLINES;
+      } else if (this.stage === PaymentStages.VIEWING_SUMMARY) {
+        this.stage = PaymentStages.SELECTING_TIP;
       }
     },
 

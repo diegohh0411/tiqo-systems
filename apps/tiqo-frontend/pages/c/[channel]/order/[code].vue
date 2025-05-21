@@ -8,11 +8,13 @@
     />
 
     <OrderDetail 
-      v-if="pfs.stage === PaymentStages.SELECTING_ORDERLINES" class="mx-auto" 
+      v-if="pfs.stage === PaymentStages.SELECTING_ORDERLINES"
       @continue="pfs.nextStage()"
     />
 
-  <OrderChooseTip v-else-if="pfs.stage === PaymentStages.SELECTING_TIP" class="mx-auto" />
+    <OrderChooseTip v-else-if="pfs.stage === PaymentStages.SELECTING_TIP" />
+
+    <OrderSummary v-else-if="pfs.stage === PaymentStages.VIEWING_SUMMARY" />
   </div>
 </template>
 

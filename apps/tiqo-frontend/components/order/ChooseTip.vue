@@ -1,5 +1,5 @@
 <template>
-  <div class="grid lg:grid-cols-2 gap-x-2 gap-y-6 w-full">
+  <div class="grid lg:grid-cols-2 gap-x-2 gap-y-6">
     <h2 class="col-span-full">Seleccionaste {{ formatPrice(pfs.selectedPrice, pfs.order?.currencyCode) }}</h2>
     <p class="col-span-full">Elige tu propina</p>
 
@@ -35,9 +35,10 @@
       size="xl"
       :disabled="pfs.selectedTipPercentage === undefined"
       trailing-icon="lucide-arrow-right"
+      @click="pfs.nextStage()"
     >
       <p>Seguir con
-        <span v-if="pfs.selectedTipPercentage !== undefined">{{ pfs.selectedTipPercentage * 100 }}% de propina</span>
+        <span v-if="pfs.selectedTipPercentage !== undefined">{{ Math.round(pfs.selectedTipPercentage * 100) }}% de propina</span>
         <span v-else>propina</span>
       </p>
     </UButton>
