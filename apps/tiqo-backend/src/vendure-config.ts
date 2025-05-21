@@ -6,6 +6,7 @@ import {
   UuidIdStrategy,
   DefaultLogger,
   LogLevel,
+  Logger,
 } from "@vendure/core";
 import {
   defaultEmailHandlers,
@@ -19,6 +20,8 @@ import "dotenv/config";
 import path from "path";
 import { TiqoPlugin } from "./plugins/tiqo/tiqo.plugin";
 import { envConfig } from "./env-config";
+
+Logger.info(`Vendure server running in ${envConfig.ENV} mode`);
 
 export const config: VendureConfig = {
   apiOptions: {
@@ -58,7 +61,7 @@ export const config: VendureConfig = {
     synchronize: envConfig.ENV !== "production",
     ssl: { rejectUnauthorized: false },
     migrations: [path.join(__dirname, "./migrations/*.+(js|ts)")],
-    logging: envConfig.ENV !== "production",
+    logging: false,
     url: envConfig.DATABASE_URL,
   },
 

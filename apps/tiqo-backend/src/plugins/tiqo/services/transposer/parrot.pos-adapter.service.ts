@@ -225,9 +225,9 @@ export class ParrotPosAdapter {
 
     const existingLine = order.lines.find(
       (existingLine) =>
-        existingLine.customFields.extSku ===
-        ParrotPosAdapter.missingModifierPriceSku &&
-        existingLine.customFields.extParentOrderlineId === parentUuid,
+        existingLine.customFields.extSku === ParrotPosAdapter.missingModifierPriceSku &&
+        existingLine.customFields.parentOrderlineId ===
+        order.lines.find(line => line.customFields.extId === parentUuid)?.id
     );
 
     if (existingLine) {
@@ -263,7 +263,8 @@ export class ParrotPosAdapter {
         extId: null,
 
         extSku: ParrotPosAdapter.missingModifierPriceSku,
-        extParentOrderlineId: parentItem.uuid,
+
+        parentOrderlineId: order.lines.find(line => line.customFields.extId === parentUuid)?.id,
 
         extName: "Complemento",
 
@@ -297,17 +298,40 @@ export class ParrotPosAdapter {
     );
   }
 
-  private groupOrderItemsByOrderReference(orderItems: ParrotOrderItem[]): {
+  /**
+   * Groups order items by orderReference and ensures parent items appear before their children 
+   * to optimize database access and maintain proper references.
+   */
+  private groupOrderItemsByOrderReferenceAndParentItem(orderItems: ParrotOrderItem[]): {
     [orderReference: ID]: ParrotOrderItem[];
   } {
     const groupedOrderItems: { [orderReference: ID]: ParrotOrderItem[] } = {};
 
+    // First pass: group items by order reference
     for (const orderItem of orderItems) {
       if (!groupedOrderItems[orderItem.orderReference]) {
         groupedOrderItems[orderItem.orderReference] = [];
       }
 
       groupedOrderItems[orderItem.orderReference].push(orderItem);
+    }
+
+    // Second pass: sort each group so parent items come before their children
+    for (const orderReference in groupedOrderItems) {
+      groupedOrderItems[orderReference].sort((a, b) => {
+        // If b is a child of a, a should come first
+        if (b.parentUuid === a.uuid) return -1;
+
+        // If a is a child of b, b should come first
+        if (a.parentUuid === b.uuid) return 1;
+
+        // If neither is a parent of the other, prioritize items without parents
+        if (!a.parentUuid && b.parentUuid) return -1;
+        if (a.parentUuid && !b.parentUuid) return 1;
+
+        // If both have parents or neither has parents, maintain original order
+        return 0;
+      });
     }
 
     return groupedOrderItems;
@@ -343,7 +367,7 @@ export class ParrotPosAdapter {
     }
 
     // By grouping the order items by orderReference, we optimize the number of access to the database.
-    const groupedOrderItems = this.groupOrderItemsByOrderReference(
+    const groupedOrderItems = this.groupOrderItemsByOrderReferenceAndParentItem(
       response.data.data,
     );
 
@@ -405,10 +429,6 @@ export class ParrotPosAdapter {
           const customFields: CustomOrderLineFields = {
             ...existingLine.customFields,
 
-            extParentOrderlineId: orderItem.parentUuid,
-            extSku: orderItem.sku,
-            extName: orderItem.itemName,
-
             extUnitCost: orderItem.unitCost * 100, // Parrot manages full pesos, so we need to convert every price into cents.
             extUnitPrice: orderItem.unitPrice * 100,
             extTotalModifierPrice: orderItem.totalModifierPrice * 100,
@@ -432,7 +452,11 @@ export class ParrotPosAdapter {
 
           const customFields: CustomOrderLineFields = {
             extId: orderItem.uuid,
-            extParentOrderlineId: orderItem.parentUuid,
+
+            parentOrderlineId: orderItem.parentUuid ?
+              currentOrder.lines.find(line => line.customFields.extId === orderItem.parentUuid)?.id
+              : undefined,
+
             extSku: orderItem.sku,
             extName: orderItem.itemName,
 

@@ -1,11 +1,10 @@
-import { RuntimeVendureConfig } from "@vendure/core";
+import { ID, RuntimeVendureConfig } from "@vendure/core";
 import { SystemOfOrigin } from "./order.configuration";
 
 declare module "@vendure/core" {
   interface CustomOrderLineFields {
     hasBeenPaidFor: boolean;
     extId: string | null;
-    extParentOrderlineId: string | null;
     extSku: string | null;
     extName: string | null;
     extUnitCost: number | null;
@@ -16,6 +15,8 @@ declare module "@vendure/core" {
     extAmountsIncludeTax: boolean | null;
     extCurrencyCode: string | null;
     extSystemOfOrigin: SystemOfOrigin | null;
+
+    parentOrderlineId?: ID | null;
   }
 }
 
@@ -31,11 +32,6 @@ export const configureOrderLineCustomFields = (
     },
     {
       name: "extId",
-      type: "string",
-      nullable: true,
-    },
-    {
-      name: "extParentOrderlineId",
       type: "string",
       nullable: true,
     },
@@ -95,6 +91,11 @@ export const configureOrderLineCustomFields = (
           value: SystemOfOrigin.TIQO,
         },
       ],
+    },
+    {
+      name: "parentOrderlineId",
+      type: "string",
+      nullable: true,
     },
   );
 };
