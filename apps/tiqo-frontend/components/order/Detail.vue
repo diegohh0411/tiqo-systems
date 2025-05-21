@@ -67,17 +67,12 @@
     </UButton>
   </div>
 
-  <div
-  v-else-if="pfs.loading"
-  :class="`
-    grid grid-cols-7 gap-2 
-    p-0 lg:p-6 w-full max-w-md
-    border-0 lg:border
-    font-mono rounded
-    min-h-64
-    animate-pulse
-  `">
-    <h3 class="col-span-full">Orden ******</h3>
+  <div v-else-if="pfs.loading" class="flex flex-col items-center gap-4">
+    <p>Cargando...</p>
+    <UIcon
+      name="lucide-loader"
+      class="animate-spin size-24"
+    />
   </div>
 
   <div v-else>

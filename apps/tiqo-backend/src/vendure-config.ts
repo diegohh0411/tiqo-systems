@@ -15,7 +15,6 @@ import {
 } from "@vendure/email-plugin";
 import { AssetServerPlugin } from "@vendure/asset-server-plugin";
 import { AdminUiPlugin } from "@vendure/admin-ui-plugin";
-import { HardenPlugin } from "@vendure/harden-plugin";
 import "dotenv/config";
 import path from "path";
 import { TiqoPlugin } from "./plugins/tiqo/tiqo.plugin";
@@ -99,10 +98,6 @@ export const config: VendureConfig = {
   // need to be updated. See the "Migrations" section in README.md.
   customFields: {},
   plugins: [
-    HardenPlugin.init({
-      maxQueryComplexity: 500,
-      apiMode: envConfig.ENV === "development" ? 'dev' : 'prod',
-    }),
     AssetServerPlugin.init({
       route: "assets",
       assetUploadDir: path.join(__dirname, "../static/assets"),

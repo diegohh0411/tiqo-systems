@@ -1,0 +1,28 @@
+import type { TypedDocumentNode, OperationVariables } from '@apollo/client/core';
+import type { DocumentNode } from 'graphql';
+
+export function tQuery<TResult = unknown, TVariables extends OperationVariables = Record<string, unknown>>(
+  document: DocumentNode | TypedDocumentNode<TResult, TVariables>,
+  variables: TVariables = {} as TVariables,
+  options?: object
+) {
+  const route = useRoute();
+
+  console.log('TQuery');
+
+  return useQuery<TResult, TVariables>(
+    document,
+    variables,
+    {
+      context: {
+        headers: {
+          'vendure-token': route.params.channel,
+        }
+      },
+      errorPolicy: 'all',
+      prefetch: false,
+      fetchPolicy: 'no-cache',
+      ...options
+    }
+  )
+}

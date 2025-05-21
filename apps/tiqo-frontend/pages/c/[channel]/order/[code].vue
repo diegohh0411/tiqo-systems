@@ -31,7 +31,7 @@
   const pfs = usePaymentFlowStore();
 
   pfs.loading = true;
-  const { onResult, onError } = useQuery(
+  const { onResult, onError } = tQuery(
     graphql(`
       query ReadOrder($code: String!) {
         readOrder(code: $code) {
@@ -39,7 +39,7 @@
         }
       }
     `),
-    { code },
+    { code }
   );
 
   onResult(({ data }) => {    
