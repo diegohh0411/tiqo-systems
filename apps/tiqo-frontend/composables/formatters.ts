@@ -1,14 +1,19 @@
 export const formatPrice = (cents: number, currencyCode?: string) => {
-  if (currencyCode === undefined) {
-    return (cents / 100).toFixed(2);
-  }
-
-  const formatter = new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: currencyCode,
+  const config: Intl.NumberFormatOptions = {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
-  });
+  }
+
+  if (currencyCode) {
+    config.style = "currency";
+    config.currency = currencyCode;
+  } else {
+    config.style = "decimal";
+  }
+
+  console.log(currencyCode, config);
+
+  const formatter = new Intl.NumberFormat("es-MX", config);
 
   return formatter.format(cents / 100);
 };

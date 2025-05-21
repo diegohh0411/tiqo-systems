@@ -68,14 +68,21 @@ export const config: VendureConfig = {
     },
   },
 
-  dbConnectionOptions: {
-    type: "postgres",
-    synchronize: envConfig.ENV !== "production",
-    ssl: { rejectUnauthorized: false },
-    migrations: [path.join(__dirname, "./migrations/*.+(js|ts)")],
-    logging: false,
-    url: envConfig.DATABASE_URL,
-  },
+  dbConnectionOptions:
+    envConfig.ENV === "development" ? {
+      type: "better-sqlite3",
+      synchronize: true,
+      database: path.join(__dirname, "../vendure.sqlite"),
+      migrations: [path.join(__dirname, "./migrations/*.+(js|ts)")],
+      logging: false,
+    } : {
+      type: "postgres",
+      synchronize: envConfig.ENV !== "production",
+      ssl: { rejectUnauthorized: false },
+      migrations: [path.join(__dirname, "./migrations/*.+(js|ts)")],
+      logging: false,
+      url: envConfig.DATABASE_URL,
+    },
 
   entityOptions: {
     entityIdStrategy: new UuidIdStrategy(),

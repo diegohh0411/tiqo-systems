@@ -20,7 +20,7 @@
     "@vendure/email-plugin": "3.2.3",
     "@vendure/harden-plugin": "^3.3.0",
     "axios": "^1.8.4",
-    "better-sqlite3": "^11.9.1",
+    "better-sqlite3": "^11.10.0",
     "big.js": "^6.2.2",
     "dotenv": "16.5.0",
     "pg": "^8.14.1"

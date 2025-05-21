@@ -36,7 +36,7 @@
   import { gsap } from "gsap";
 
   const props = defineProps<{
-    uuid: string;
+    id: string;
     extId: string | null | undefined;
     quantity: number;
     name: string|null|undefined;
@@ -52,10 +52,14 @@
 
   const orderline = ref<HTMLElement | null>(null);
 
-  const selectedOrderlines = useSelectedOrderLines();
-  
-  const selectedQuantity = ref(0);
+  const store = useSelectedOrderLines();
   const selected = computed(() => selectedQuantity.value > 0);
+  const selectedQuantity = ref(0);
+
+  const existingState = store.items.find((item) => item.id === props.id);
+  if (existingState) {
+    selectedQuantity.value = existingState.selectedQuantity;
+  }
 
   const tl = gsap.timeline({
     defaults: {
@@ -64,14 +68,19 @@
     }
   });
 
-  watch(selected, (newSelectedValue) => {
-    if (newSelectedValue) {
-      selectedOrderlines.addSelectedOrderline(props.uuid, selectedQuantity.value)
+  watch(selectedQuantity, (newQuantity) => {
+    if (newQuantity > 0) {
+      store.addSelectedOrderline(props.id, selectedQuantity.value)
 
       tl.to(orderline.value, {
         scale: 0.98,
       })
 
+      tl.to(orderline.value, {
+        scale: 1.02,
+      });
+    } else {
+      store.removeSelectedOrderline(props.id);
       tl.to(orderline.value, {
         scale: 1,
       });

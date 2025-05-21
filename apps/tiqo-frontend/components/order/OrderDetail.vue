@@ -26,9 +26,9 @@
 
     <OrderItem
       v-for="(parentLine, parentIndex) in orderStore.order.lines?.filter(l => l?.customFields?.parentOrderlineId === null) || []"
-      :key="parentIndex"
+      :id="parentLine.id"
 
-      :uuid="parentLine.id"
+      :key="parentIndex"
       :ext-id="parentLine.customFields?.extId"
       :quantity="parentLine.quantity"
       :name="parentLine.customFields?.extName"
@@ -57,15 +57,14 @@
 
     <hr class="col-span-full my-4 border-dashed border-neutral-300 dark:border-neutral-600" >
 
-    <CoreButton
+    <UButton
       :disabled="selectedOrderlines.items.length == 0"
-      :effect="'expandWhileLoading'"
-      :class="`
-        col-span-full
-        ${
-        selectedOrderlines.items.length > 0 ? 'bg-blue-400 text-white dark:bg-blue-700' : 'cursor-not-allowed  bg-neutral-200 dark:bg-neutral-700' }`">
-      <p>Pagar {{ formatPrice(selectedOrderlines.selectedTotalPrice, orderStore.order.currencyCode) }}</p>
-    </CoreButton>
+      class="col-span-full text-center"
+      size="xl"
+      @click="$emit('continue')"
+      >
+        Seleccionar {{ formatPrice(selectedOrderlines.selectedTotalPrice, orderStore.order.currencyCode) }}
+    </UButton>
   </div>
 
   <div
@@ -84,7 +83,7 @@
   <div v-else>
     <UAlert
       title="Oh oh"
-      description="No se ha podido cargar la orden"
+      description="No hemos podido encontrar tu orden"
       icon="lucide-cloud-alert"
       color="error"
       variant="subtle"
@@ -94,9 +93,9 @@
 </template>
 
 <script setup lang="ts">
-  const orderStore = useOrderStore();
+  defineEmits(['continue']);
 
-  console.log('orderstore order', orderStore.order)
+  const orderStore = useOrderStore();
 
   const selectedOrderlines = useSelectedOrderLines();
 </script>

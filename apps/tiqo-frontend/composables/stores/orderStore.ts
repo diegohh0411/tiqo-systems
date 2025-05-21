@@ -25,25 +25,26 @@ export const useSelectedOrderLines = defineStore("selectedOrderLines", {
   getters: {
     selectedTotalPrice: (state) => {
       const order = useOrderStore().order;
+
       if (order === null) {
         return 0
       }
 
       return state.items.reduce((acc, selectedLine) => {
         const currentOrderline = order.lines.find(l => l.id === selectedLine.id);
+        if (!currentOrderline) {
+          return acc;
+        }
+
         const childrenOrderlines = order.lines.filter(l => l.customFields?.parentOrderlineId === selectedLine.id);
 
         const childrenOrderlinesTotal = childrenOrderlines.reduce((acc, childLine) => {
           return acc + (childLine.linePrice * selectedLine.selectedQuantity);
-        }, 0);
+        }, 0) / selectedLine.selectedQuantity;
 
-        if (currentOrderline) {
-          return acc
-            + (currentOrderline.linePrice * selectedLine.selectedQuantity)
-            + (childrenOrderlinesTotal / currentOrderline.quantity) * selectedLine.selectedQuantity;
-        }
+        const currentOrderlineTotal = currentOrderline.linePrice / currentOrderline.quantity * selectedLine.selectedQuantity;
 
-        return acc;
+        return acc + currentOrderlineTotal + childrenOrderlinesTotal;
       }, 0);
     }
   },
@@ -55,6 +56,12 @@ export const useSelectedOrderLines = defineStore("selectedOrderLines", {
       } else {
         this.items.push({ id, selectedQuantity });
       }
-    }
+    },
+    removeSelectedOrderline(id: string) {
+      const index = this.items.findIndex(line => line.id === id);
+      if (index !== -1) {
+        this.items.splice(index, 1);
+      }
+    },
   }
 });
