@@ -1,51 +1,61 @@
 <template>
-  <div class="grid lg:grid-cols-2 gap-x-2 gap-y-6">
-    <h1 class="col-span-full">Seleccionaste {{ formatPrice(selectedOrderlines.selectedTotalPrice, order.order?.currencyCode) }}</h1>
+  <div class="grid lg:grid-cols-2 gap-x-2 gap-y-6 w-full">
+    <h1 class="col-span-full">Seleccionaste {{ formatPrice(pfs.selectedPrice, pfs.order?.currencyCode) }}</h1>
     <p class="col-span-full">Elige tu propina</p>
 
     <UButton
+      v-for="(percentage, index) in percentages"
+      :key="index"
       variant="outline"
-      color="neutral"
+      :color="pfs.selectedTipPercentage === percentage ? 'primary' : 'neutral'"
       size="xl"
+      @click="pfs.setTip(percentage)"
     >
-      15% <span class="opacity-50">{{  formatPrice(selectedOrderlines.selectedTotalPrice * 0.15, order.order?.currencyCode) }}</span>
+      {{ percentage * 100 }}% <span class="opacity-50">{{  formatPrice(pfs.selectedPrice * percentage, pfs.order?.currencyCode) }}</span>
     </UButton>
+    
+    <UInputNumber
+      v-model="customTip"
+      :step="0.01"
+      :format-options="{
+        style: 'percent'
+      }"
+      :min="0"
+      :max="1"
+      size="xl"
+      :color="customTipIsSelected ? 'primary' : 'neutral'"
+      :highlight="customTipIsSelected"
+      placeholder="Otra propina"
+    />
 
     <UButton
-      variant="outline"
-      color="neutral"
+      class="col-span-full"
       size="xl"
+      :disabled="pfs.selectedTipPercentage === undefined"
+      trailing-icon="lucide-arrow-right"
     >
-      20% <span class="opacity-50">{{  formatPrice(selectedOrderlines.selectedTotalPrice * 0.2, order.order?.currencyCode) }}</span>
+      <p>Seguir con
+        <span v-if="pfs.selectedTipPercentage !== undefined">{{ pfs.selectedTipPercentage * 100 }}% de propina</span>
+        <span v-else>propina</span>
+      </p>
     </UButton>
-
-    <UButton
-      variant="outline"
-      color="neutral"
-      size="xl"
-    >
-      25% <span class="opacity-50">{{  formatPrice(selectedOrderlines.selectedTotalPrice * 0.25, order.order?.currencyCode) }}</span>
-    </UButton>
-
-    <UButton
-      variant="outline"
-      color="neutral"
-      size="xl"
-    >
-      Otro
-    </UButton>
-
-    <UButton
-    class="col-span-full"
-    size="xl"
-    >
-      Continuar
-    </UButton>
-
   </div>
 </template>
 
 <script setup lang="ts">
-  const selectedOrderlines = useSelectedOrderLines();
-  const order = useOrderStore();
+  const pfs = usePaymentFlowStore();
+
+  const customTip = ref<number|undefined>(undefined);
+
+  const customTipIsSelected = computed(() => {
+    return customTip.value !== undefined && pfs.selectedTipPercentage === customTip.value ? true : false
+  })
+
+  watch(customTip, (newValue) => {
+    if (newValue !== undefined) {
+      pfs.setTip(newValue);
+    }
+  });
+
+  const percentages = [0.25, 0.20, 0.15];
 </script>

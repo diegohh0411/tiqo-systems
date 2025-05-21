@@ -1,20 +1,24 @@
 <template>
-  <OrderDetail 
-    v-if="flowState === OrderFlowState.SELECTING_ORDERLINES" class="mx-auto" 
-    @continue="flowState = OrderFlowState.SELECTING_TIP"
-  />
-  <OrderChooseTip v-else-if="flowState === OrderFlowState.SELECTING_TIP" class="mx-auto" />
+  <div class="w-full max-w-lg mx-auto flex flex-col gap-6">
+    <UIcon 
+      v-if="pfs.stage !== PaymentStages.SELECTING_ORDERLINES" 
+      name="lucide-arrow-left"
+      
+      @click="pfs.prevStage()"
+    />
+
+    <OrderDetail 
+      v-if="pfs.stage === PaymentStages.SELECTING_ORDERLINES" class="mx-auto" 
+      @continue="pfs.nextStage()"
+    />
+
+  <OrderChooseTip v-else-if="pfs.stage === PaymentStages.SELECTING_TIP" class="mx-auto" />
+  </div>
 </template>
 
 <script setup lang="ts">
   import { graphql } from '~/codegen/gql';
   import type { OrderFragmentFragment } from '~/codegen/gql/graphql';
-
-  enum OrderFlowState {
-    SELECTING_ORDERLINES = 'SELECTING_ORDERLINES',
-    SELECTING_TIP = 'SELECTING_TIP',
-  }
-  const flowState = ref<OrderFlowState>(OrderFlowState.SELECTING_ORDERLINES);
 
   const route = useRoute();
   let code = route.params.code as string | string[];
@@ -22,9 +26,9 @@
     code = code[0];
   }
 
-  const orderStore = useOrderStore();
+  const pfs = usePaymentFlowStore();
 
-  orderStore.loading = true;
+  pfs.loading = true;
   const { onResult, onError } = useQuery(
     graphql(`
       query ReadOrder($code: String!) {
@@ -36,18 +40,16 @@
     { code },
   );
 
-  onResult(({ data }) => {
-    console.log('data', data);
-    
-    orderStore.loading = false;
+  onResult(({ data }) => {    
+    pfs.loading = false;
     if (data?.readOrder) {
-      orderStore.setOrder(data.readOrder as OrderFragmentFragment);
+      pfs.order = data.readOrder as OrderFragmentFragment;
     }
-  })
+  });
 
   onError((error) => {
     console.error('Error fetching order:', error);
-    orderStore.loading = false;
+    pfs.loading = false;
   });
 
 </script>

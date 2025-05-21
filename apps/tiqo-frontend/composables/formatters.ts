@@ -11,8 +11,6 @@ export const formatPrice = (cents: number, currencyCode?: string) => {
     config.style = "decimal";
   }
 
-  console.log(currencyCode, config);
-
   const formatter = new Intl.NumberFormat("es-MX", config);
 
   return formatter.format(cents / 100);

@@ -9,7 +9,7 @@
       rounded
     `"
     :class="{
-      'bg-neutral-100 dark:bg-neutral-800' : selected,
+      'bg-neutral-100 dark:bg-neutral-800' : pfs.orderlineIsSelected(props.id),
 
     }"
   >
@@ -27,6 +27,7 @@
       class="col-span-full mt-3"
       :max="props.quantity"
       :min="0"
+      size="lg"
       color="neutral"
     />
   </div>
@@ -52,14 +53,11 @@
 
   const orderline = ref<HTMLElement | null>(null);
 
-  const store = useSelectedOrderLines();
-  const selected = computed(() => selectedQuantity.value > 0);
-  const selectedQuantity = ref(0);
+  const pfs = usePaymentFlowStore();
 
-  const existingState = store.items.find((item) => item.id === props.id);
-  if (existingState) {
-    selectedQuantity.value = existingState.selectedQuantity;
-  }
+  const selectedQuantity = ref(
+    pfs.getSelectedOrderline(props.id)?.quantity || 0
+  );
 
   const tl = gsap.timeline({
     defaults: {
@@ -69,22 +67,15 @@
   });
 
   watch(selectedQuantity, (newQuantity) => {
-    if (newQuantity > 0) {
-      store.addSelectedOrderline(props.id, selectedQuantity.value)
+    pfs.doSelectOrderline(props.id, newQuantity)
 
-      tl.to(orderline.value, {
-        scale: 0.98,
-      })
+    tl.to(orderline.value, {
+      scale: 0.98,
+    })
 
-      tl.to(orderline.value, {
-        scale: 1.02,
-      });
-    } else {
-      store.removeSelectedOrderline(props.id);
-      tl.to(orderline.value, {
-        scale: 1,
-      });
-    }
+    tl.to(orderline.value, {
+      scale: 1.02,
+    });
   })
 
 </script>
