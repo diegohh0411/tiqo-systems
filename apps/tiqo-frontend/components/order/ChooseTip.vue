@@ -1,6 +1,6 @@
 <template>
   <div class="grid lg:grid-cols-2 gap-x-2 gap-y-6 w-full">
-    <h1 class="col-span-full">Seleccionaste {{ formatPrice(pfs.selectedPrice, pfs.order?.currencyCode) }}</h1>
+    <h2 class="col-span-full">Seleccionaste {{ formatPrice(pfs.selectedPrice, pfs.order?.currencyCode) }}</h2>
     <p class="col-span-full">Elige tu propina</p>
 
     <UButton
@@ -26,6 +26,8 @@
       :color="customTipIsSelected ? 'primary' : 'neutral'"
       :highlight="customTipIsSelected"
       placeholder="Otra propina"
+
+      @blur="onBlur"
     />
 
     <UButton
@@ -56,6 +58,12 @@
       pfs.setTip(newValue);
     }
   });
+
+  const onBlur = () => {
+    if (customTip.value !== undefined) {
+      pfs.setTip(customTip.value);
+    }
+  }
 
   const percentages = [0.25, 0.20, 0.15];
 </script>
