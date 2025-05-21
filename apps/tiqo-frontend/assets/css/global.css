@@ -1,6 +1,18 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
 
+@theme {
+  --font-sans: Sora, sans-serif;
+}
+
+body {
+  @apply bg-white dark:bg-black text-neutral-900 dark:text-neutral-50;
+}
+
+@theme {
+  --font-sans: Sora, sans-serif;
+}
+
 body * {
   @apply border-neutral-300 dark:border-neutral-600
 }
@@ -10,7 +22,7 @@ body * {
 }
 
 .page-width {
-  @apply w-full max-w-5xl mx-auto;
+  @apply w-full max-w-7xl mx-auto;
 }
 
 .surface {
@@ -18,13 +30,13 @@ body * {
 }
 
 h1 {
-  @apply font-bold text-4xl;
+  @apply text-4xl lg:text-5xl leading-snug;
 }
 
 h2 {
-  @apply font-bold text-2xl;
+  @apply text-xl lg:text-2xl;
 }
 
 h3 {
-  @apply font-bold text-xl;
+  @apply text-lg lg:text-xl;
 }

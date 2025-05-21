@@ -1,67 +1,83 @@
 <template>
-  <button
-    ref="buttonRef"
-    class="flex items-center justify-center px-3 py-4 gap-2 rounded cursor-pointer"
-    :class="props.class"
+  <UButton
+    ref="button"
+    v-bind="props"
+    class="relative overflow-hidden cursor-pointer px-6"
 
-    @mouseenter="onHover"
-    @mouseleave="onLeave"
-    @click="onClick"
+    @mouseover="(e: Event) => onHover(e.target)"
+    @mouseleave="(e: Event) => onLeave(e.target)"
   >
-
-    <Icon v-if="props.effect == 'expandWhileLoading' && hasBeenClicked" name="lucide:loader" class="animate-spin" />
-    <slot>Default value</slot>
     
-  </button>
+    <slot />
+
+    <div id="hover-background" class="bg-black absolute inset-y-0 left-0 -z-10" />
+  </UButton>
+
+  
 </template>
 
 <script setup lang="ts">
-  import { ref } from 'vue';
   import { gsap } from 'gsap';
 
   const props = defineProps<{
-    class?: string;
-    disabled?: boolean,
-    effect?: 'expandWhileLoading';
+    animate?: boolean;
   }>();
 
-  const hasBeenClicked = ref(false);
+  const onHover = (eventTarget: EventTarget | null) => {
+    const hoverBackground = (eventTarget as Element)?.querySelector('#hover-background') as HTMLElement;
 
-  const buttonRef = ref<HTMLElement | null>(null);
-
-  const tl = gsap.timeline({
-    defaults: {
-      duration: 0.2,
-      ease: 'power4.out'
-    }
-  });
-
-  const onHover = () => {
-    if (buttonRef.value && !props.disabled) {
-      tl.to(buttonRef.value, {
-        scale: 1.04,
-      });
-    }
-  }
-
-  const onLeave = () => {
-    if (buttonRef.value) {
-      tl.to(buttonRef.value, {
+    gsap.fromTo(
+      hoverBackground,
+      {
+        width: '0%',
+        borderRadius: '9999px',
+        scale: 2,
+        ease: 'power2.out',
+      },
+      {
+        width: '100%',
+        y: 0,
+        borderRadius: '0px',
         scale: 1,
-      });
-    }
+      }
+    );
+
+    gsap.to(
+      eventTarget,
+      {
+        scale: 1.05,
+        rotate: -0.5,
+        ease: 'power2.out',
+      }
+    )
   }
 
-  const onClick = () => {
-    if (props.disabled) return;
-    hasBeenClicked.value = true;
+  const onLeave = (eventTarget: EventTarget | null) => {
+    const hoverBackground = (eventTarget as Element)?.querySelector('#hover-background') as HTMLElement;
 
-    if (props.effect === 'expandWhileLoading') {
-      tl.to(buttonRef.value, {
-        ease: 'expo.out',
-        duration: 1.4,
-        scale: 1.08,
-      });
-    }
+    gsap.fromTo(
+      hoverBackground,
+      {
+        width: '100%',
+        y: 0,
+        borderRadius: '0px',
+        scale: 1,
+        ease: 'power2.out',
+      },
+      {
+        width: '0%',
+        borderRadius: '9999px',
+        scale: 2,
+      }
+    );
+
+    gsap.to(
+      eventTarget,
+      {
+        scale: 1,
+        rotate: 0,
+        ease: 'power2.out',
+      }
+    )
   }
 </script>

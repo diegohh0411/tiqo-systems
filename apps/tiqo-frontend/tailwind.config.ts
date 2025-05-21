@@ -6,10 +6,9 @@ export default <Config>{
   ],
   config: {
     theme: {
-      extend: {
-        fontFamily: {
-          mono: ["JetBrains Mono", "monospace"],
-        },
+      fontFamily: {
+        mono: ["JetBrains Mono", "monospace"],
+        sans: ["Bricolage Grotesque", "sans-serif"],
       },
     },
   }
