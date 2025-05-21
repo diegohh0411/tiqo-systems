@@ -223,11 +223,24 @@ export class ParrotPosAdapter {
       return;
     }
 
-    const existingLine = order.lines.find(
-      (existingLine) =>
-        existingLine.customFields.extSku === ParrotPosAdapter.missingModifierPriceSku &&
-        existingLine.customFields.parentOrderlineId ===
-        order.lines.find(line => line.customFields.extId === parentUuid)?.id
+    // Refresh the order data to ensure we have the latest state
+    // The only way to get the order lines correctly is to fetch again, NEED TO OPTIMIZE THIS. TODO!
+    const refreshedOrder = await this.orderService.findOne(ctx, order.code, ["lines"]);
+
+    if (!refreshedOrder) {
+      Logger.error(
+        `Order not found for code ${order.code}`,
+        ParrotPosAdapter.loggerCtx,
+      );
+      throw new StandardError(TiqoErrorCodes.INVALID_RESOURCE_REFERENCE);
+    }
+
+    const parentLine = refreshedOrder.lines.find(line => line.customFields.extId === parentUuid);
+
+    const existingLine = refreshedOrder.lines.find(
+      (line) =>
+        line.customFields.extSku === ParrotPosAdapter.missingModifierPriceSku &&
+        line.customFields.parentOrderlineId === parentLine?.id
     );
 
     if (existingLine) {
@@ -264,7 +277,7 @@ export class ParrotPosAdapter {
 
         extSku: ParrotPosAdapter.missingModifierPriceSku,
 
-        parentOrderlineId: order.lines.find(line => line.customFields.extId === parentUuid)?.id,
+        parentOrderlineId: parentLine?.id,
 
         extName: "Complemento",
 

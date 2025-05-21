@@ -14,6 +14,10 @@ export const formatPrice = (cents: number, currencyCode?: string) => {
 };
 
 export const formatTime = (string: string) => {
+  if (!string) {
+    return "";
+  }
+
   const date = new Date(string);
   const options: Intl.DateTimeFormatOptions = {
     year: "numeric",

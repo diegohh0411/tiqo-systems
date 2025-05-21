@@ -1,7 +1,7 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
 
-.border,.border-b,.border-t,.border-l,.border-r,.border-x,.border-y {
+body * {
   @apply border-neutral-300 dark:border-neutral-600
 }
 

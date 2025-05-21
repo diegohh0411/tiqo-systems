@@ -23,12 +23,13 @@ export default defineNuxtConfig({
     "@nuxt/test-utils",
     "@nuxtjs/apollo",
     "@nuxt/ui",
+    "@pinia/nuxt"
   ],
 
   apollo: {
     clients: {
       default: {
-        httpEndpoint: "http://localhost:3000/shop-api",
+        httpEndpoint: "http://localhost:10000/shop-api",
         httpLinkOptions: {
           credentials: "include",
         },
@@ -39,5 +40,8 @@ export default defineNuxtConfig({
         }
       },
     },
+  },
+  pinia: {
+    storesDirs: ['./composables/stores/**']
   }
 });

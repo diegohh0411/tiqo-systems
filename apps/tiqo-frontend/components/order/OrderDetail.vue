@@ -1,68 +1,16 @@
-<script setup lang="ts">
-import { graphql } from '~/codegen/gql';
-import { type FragmentType, useFragment } from "~/codegen/gql/fragment-masking";
-
-const OrderFragment = graphql(`
-    fragment OrderFragment on Order {
-      code
-      updatedAt
-      totalWithTax
-      currencyCode
-      lines {
-        id
-        customFields {
-          extId
-          extName
-          extSku
-          extUnitCost
-          extParentOrderlineId
-          hasBeenPaidFor
-        }
-        linePrice
-        quantity
-      }
-    }
-  `)
-
-const props = defineProps<{
-  order: FragmentType<typeof OrderFragment>;
-}>();
-
-const order = useFragment(OrderFragment, props.order);
-
-const selectedOrderlines = ref<string[]>([]);
-const handleSelectionChange = (payload: { uuid: string, extId: string | null | undefined, selected: boolean }) => {
-  const allChildrenIds = (order.lines?.filter((line) => line.customFields?.extParentOrderlineId === payload.extId) || [])
-    .map((line) => line.id);
-
-  if (payload.selected) {
-    selectedOrderlines.value.push(payload.uuid, ...allChildrenIds);
-  } else {
-    selectedOrderlines.value = selectedOrderlines.value.filter((id) => id !== payload.uuid && !allChildrenIds.includes(id));
-  }
-};
-
-const selectedPrice = computed(() => {
-  return order.lines?.reduce((acc, line) => {
-    if (selectedOrderlines.value.includes(line.id)) {
-      return acc + (line.customFields?.extUnitCost || line.linePrice) * line.quantity;
-    }
-    return acc;
-  }, 0) || 0;
-});
-
-</script>
-
 <template>
   <div
+  v-if="orderStore.order && !orderStore.loading"
     :class="`
-      grid grid-cols-7 gap-2 p-4
-      lg:p-6 w-full max-w-md
-      border font-mono rounded
+      grid grid-cols-7 gap-2 
+      p-0 lg:p-6 w-full max-w-md
+      border-0 lg:border
+      font-mono rounded
+      min-h-64
   `">
   
-    <h3 class="col-span-full">Orden {{ order.code }}</h3>
-    <p class="col-span-full text-xs mb-6">{{ formatTime(order.updatedAt) }}</p>
+    <h3 class="col-span-full">Orden {{ orderStore.order.code }}</h3>
+    <p class="col-span-full text-xs mb-6">{{ formatTime(orderStore.order.updatedAt) }}</p>
 
     <p class="col-span-1 col-start-2  font-bold">
       Ctd.
@@ -77,7 +25,7 @@ const selectedPrice = computed(() => {
     </p>
 
     <OrderItem
-      v-for="(parentLine, parentIndex) in order.lines?.filter(l => l?.customFields?.extParentOrderlineId === null) || []"
+      v-for="(parentLine, parentIndex) in orderStore.order.lines?.filter(l => l?.customFields?.parentOrderlineId === null) || []"
       :key="parentIndex"
 
       :uuid="parentLine.id"
@@ -87,7 +35,7 @@ const selectedPrice = computed(() => {
       :unit-cost="parentLine.customFields?.extUnitCost || parentLine.linePrice"
 
       :child-items="(
-        order.lines?.filter(l => l.customFields?.extParentOrderlineId === parentLine.customFields?.extId) || [])
+        orderStore.order.lines.filter(l => l.customFields?.parentOrderlineId === parentLine.id) || [])
           .map((childLine) => ({
             uuid: childLine.id,
             name: childLine.customFields?.extName,
@@ -95,8 +43,6 @@ const selectedPrice = computed(() => {
             unitCost: childLine.customFields?.extUnitCost || childLine.linePrice,
           })
       )"
-
-      @selection-change="handleSelectionChange"
     />
     
     <div class="col-span-full ml-auto mt-3">
@@ -105,20 +51,52 @@ const selectedPrice = computed(() => {
 
     <div class="col-span-full ml-auto text-xl flex gap-3 justify-between">
       <span>$</span>
-      <span>{{ formatPrice(order.totalWithTax) }}</span>
-      <span>{{ order.currencyCode }}</span>
+      <span>{{ formatPrice(orderStore.order.totalWithTax) }}</span>
+      <span>{{ orderStore.order.currencyCode }}</span>
     </div> 
 
     <hr class="col-span-full my-4 border-dashed border-neutral-300 dark:border-neutral-600" >
 
     <CoreButton
-      :disabled="selectedOrderlines.length == 0"
+      :disabled="selectedOrderlines.items.length == 0"
       :effect="'expandWhileLoading'"
       :class="`
         col-span-full
         ${
-        selectedOrderlines.length > 0 ? 'bg-blue-400 text-white dark:bg-blue-700' : 'cursor-not-allowed  bg-neutral-200 dark:bg-neutral-700' }`">
-      <p>Pagar {{ formatPrice(selectedPrice, order.currencyCode) }}</p>
+        selectedOrderlines.items.length > 0 ? 'bg-blue-400 text-white dark:bg-blue-700' : 'cursor-not-allowed  bg-neutral-200 dark:bg-neutral-700' }`">
+      <p>Pagar {{ formatPrice(selectedOrderlines.selectedTotalPrice, orderStore.order.currencyCode) }}</p>
     </CoreButton>
   </div>
+
+  <div
+  v-else-if="orderStore.loading" 
+  :class="`
+    grid grid-cols-7 gap-2 
+    p-0 lg:p-6 w-full max-w-md
+    border-0 lg:border
+    font-mono rounded
+    min-h-64
+    animate-pulse
+  `">
+    <h3 class="col-span-full">Orden ******</h3>
+  </div>
+
+  <div v-else>
+    <UAlert
+      title="Oh oh"
+      description="No se ha podido cargar la orden"
+      icon="lucide-cloud-alert"
+      color="error"
+      variant="subtle"
+    />
+
+  </div>
 </template>
+
+<script setup lang="ts">
+  const orderStore = useOrderStore();
+
+  console.log('orderstore order', orderStore.order)
+
+  const selectedOrderlines = useSelectedOrderLines();
+</script>
