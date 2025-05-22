@@ -25,13 +25,16 @@
         <p class="col-span-2">{{ formatPrice(pfs.getSelectedOrderline(item.id)?.priceToCharge || 0, pfs.order?.currencyCode) }}</p>
       </template>
 
+      <p class="col-span-3 col-start-3 font-bold">Subtotal</p>
+      <p class="col-span-1">{{ formatPrice(pfs.priceBeforeTip, pfs.order?.currencyCode) }}</p>
+
       <USeparator class="col-span-full" />
 
-      <p class="col-span-2 col-start-4">Propina</p>
-      <p class="col-span-1">{{ formatPrice((pfs.selectedTipPercentage || 0) * pfs.selectedPriceBeforeTip, pfs.order?.currencyCode)  }}</p>
+      <p class="col-span-3 col-start-3">Propina <span class="opacity-50">({{ pfs.formattedPercentageOfTip }})</span></p>
+      <p class="col-span-1">{{ formatPrice(pfs.priceOfTip, pfs.order?.currencyCode)  }}</p>
 
-      <p class="col-span-2 col-start-4">Total</p>
-      <p class="col-span-1">{{ formatPrice(pfs.selectedPriceBeforeTip + (pfs.selectedTipPercentage || 0) * pfs.selectedPriceBeforeTip, pfs.order?.currencyCode) }}</p>
+      <p class="col-span-3 col-start-3 font-bold">Total</p>
+      <p class="col-span-1">{{ formatPrice(pfs.priceWithTip, pfs.order?.currencyCode) }}</p>
     </div>
 
     

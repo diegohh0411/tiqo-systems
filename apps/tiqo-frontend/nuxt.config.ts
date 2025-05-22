@@ -39,7 +39,8 @@ export default defineNuxtConfig({
       },
     },
   },
+
   pinia: {
     storesDirs: ['./composables/stores/**']
-  }
+  },
 });

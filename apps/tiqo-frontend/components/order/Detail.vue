@@ -1,6 +1,6 @@
 <template>
   <div
-  v-if="pfs.order && !pfs.loading"
+  v-if="pfs.order && !pfs.fetching"
     :class="`
       grid grid-cols-7 gap-2 
       w-full max-w-md
@@ -63,11 +63,11 @@
       trailing-icon="lucide-arrow-right"
       @click="pfs.nextStage()"
       >
-        Seleccionar {{ formatPrice(pfs.selectedPriceBeforeTip, pfs.order.currencyCode) }}
+        Seleccionar {{ formatPrice(pfs.priceBeforeTip, pfs.order.currencyCode) }}
     </UButton>
   </div>
 
-  <div v-else-if="pfs.loading" class="flex flex-col items-center gap-4">
+  <div v-else-if="pfs.fetching" class="flex flex-col items-center gap-4">
     <p>Cargando...</p>
     <UIcon
       name="lucide-loader"

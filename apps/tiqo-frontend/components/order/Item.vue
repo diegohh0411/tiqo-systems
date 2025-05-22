@@ -34,8 +34,6 @@
 </template>
 
 <script setup lang="ts">
-  import { gsap } from "gsap";
-
   const props = defineProps<{
     id: string;
     extId: string | null | undefined;
@@ -59,23 +57,10 @@
     pfs.getSelectedOrderline(props.id)?.quantity || 0
   );
 
-  const tl = gsap.timeline({
-    defaults: {
-      duration: 0.1,
-      ease: 'power4.out'
-    }
-  });
-
   watch(selectedQuantity, (newQuantity) => {
     pfs.doSelectOrderline(props.id, newQuantity)
 
-    tl.to(orderline.value, {
-      scale: 0.98,
-    })
-
-    tl.to(orderline.value, {
-      scale: 1.02,
-    });
+    animateClick(orderline.value)
   })
 
 </script>

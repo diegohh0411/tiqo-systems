@@ -9,12 +9,13 @@ export enum PaymentStages {
 
 interface PaymentFlowState {
   order: OrderFragmentFragment | null;
-  /** The quantity selected per orderline */
+  /** Each key is they ID of an orderline, where the value is the quantity selected by the user. */
   selectedQuantities: {
     [orderlineId in OrderFragmentFragment["lines"][number]["id"]]: number;
   }
-  selectedTipPercentage: number | undefined;
-  loading: boolean;
+  percentageOfTip: number;
+
+  fetching: boolean;
   stage: PaymentStages;
 }
 
@@ -22,8 +23,8 @@ export const usePaymentFlowStore = defineStore("paymentFlow", {
   state: (): PaymentFlowState => ({
     order: null,
     selectedQuantities: {},
-    selectedTipPercentage: undefined,
-    loading: false,
+    percentageOfTip: 0.20,
+    fetching: false,
     stage: PaymentStages.SELECTING_ORDERLINES
   }),
   getters: {
@@ -36,7 +37,8 @@ export const usePaymentFlowStore = defineStore("paymentFlow", {
         .filter((o) => state.selectedQuantities[o.id] > 0)
     },
 
-    selectedPriceBeforeTip(state) {
+    /** The price selected by the user before the tip. */
+    priceBeforeTip(state) {
       if (!state.order || state.order.lines.length === 0) {
         return 0;
       }
@@ -58,6 +60,20 @@ export const usePaymentFlowStore = defineStore("paymentFlow", {
 
       return prices
     },
+
+    /** The amount in money of the tip. */
+    priceOfTip(): number {
+      return this.priceBeforeTip * this.percentageOfTip;
+    },
+
+    /** The price selected by the user after the tip. */
+    priceWithTip(): number {
+      return this.priceBeforeTip + this.priceOfTip;
+    },
+
+    formattedPercentageOfTip(): string {
+      return `${Math.round(this.percentageOfTip * 100)}%`;
+    }
   },
   actions: {
     nextStage() {
@@ -111,7 +127,7 @@ export const usePaymentFlowStore = defineStore("paymentFlow", {
         throw new Error("Tip percentage must be between 0 and 1");
       }
 
-      this.selectedTipPercentage = percentage;
+      this.percentageOfTip = percentage;
     }
   }
 });

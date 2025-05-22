@@ -1,7 +1,7 @@
 <template>
   <div
   :class="`
-    flex flex-col gap-6 items-center justify-between
+    flex flex-col gap-6 items-center
     min-h-screen h-full w-screen
   `">
 
@@ -12,6 +12,7 @@
       flex flex-col gap-3
       page-padding-x
       page-width
+      flex-grow
     `">
       <slot />
     </div>

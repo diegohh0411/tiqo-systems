@@ -1,44 +1,53 @@
 <template>
-  <div class="grid lg:grid-cols-2 gap-x-2 gap-y-6">
-    <h2 class="col-span-full">Seleccionaste {{ formatPrice(pfs.selectedPriceBeforeTip, pfs.order?.currencyCode) }}</h2>
+  <div class="grid grid-cols-2 gap-x-2 gap-y-6">
+    <h2 class="col-span-full">Estás por pagar {{ formatPrice(pfs.priceBeforeTip, pfs.order?.currencyCode) }}</h2>
     <p class="col-span-full">Elige tu propina</p>
 
     <UButton
       v-for="(percentage, index) in percentages"
       :key="index"
-      variant="outline"
-      :color="pfs.selectedTipPercentage === percentage ? 'primary' : 'neutral'"
-      size="xl"
-      @click="pfs.setTip(percentage)"
+      :variant="pfs.percentageOfTip === percentage ? 'subtle' : 'outline'"
+      :class="{
+        'rounded-full': pfs.percentageOfTip === percentage,
+      }"
+
+      color="neutral"
+      @click="onClick($event, percentage)"
     >
-      {{ percentage * 100 }}% <span class="opacity-50">{{  formatPrice(pfs.selectedPriceBeforeTip * percentage, pfs.order?.currencyCode) }}</span>
+      {{ percentage * 100 }}%
     </UButton>
     
-    <UInputNumber
-      v-model="customTip"
+    <UFormField label="Tu propina actual" help="Puedes ingresar tu propia cantidad también" class="col-span-full">
+      <UInputNumber
+      v-model="pfs.percentageOfTip"
+      class="w-full"
+      size="xl"
+
       :step="0.01"
       :format-options="{
         style: 'percent'
       }"
+
       :min="0"
       :max="1"
-      size="xl"
-      :color="customTipIsSelected ? 'primary' : 'neutral'"
-      :highlight="customTipIsSelected"
-      placeholder="Otra propina"
 
-      @blur="onBlur"
+      color="primary"
+
+      :highlight="true"
+
+      placeholder="Otra propina"
+      :autofocus="false"
     />
+    </UFormField>
 
     <UButton
       class="col-span-full"
       size="xl"
-      :disabled="pfs.selectedTipPercentage === undefined"
       trailing-icon="lucide-arrow-right"
       @click="pfs.nextStage()"
     >
       <p>Seguir con
-        <span v-if="pfs.selectedTipPercentage !== undefined">{{ Math.round(pfs.selectedTipPercentage * 100) }}% de propina</span>
+        <span v-if="pfs.percentageOfTip !== undefined">{{ pfs.formattedPercentageOfTip }} de propina</span>
         <span v-else>propina</span>
       </p>
     </UButton>
@@ -48,23 +57,10 @@
 <script setup lang="ts">
   const pfs = usePaymentFlowStore();
 
-  const customTip = ref<number|undefined>(undefined);
+  const percentages = [0.25, 0.20, 0.15, 0.10];
 
-  const customTipIsSelected = computed(() => {
-    return customTip.value !== undefined && pfs.selectedTipPercentage === customTip.value ? true : false
-  })
-
-  watch(customTip, (newValue) => {
-    if (newValue !== undefined) {
-      pfs.setTip(newValue);
-    }
-  });
-
-  const onBlur = () => {
-    if (customTip.value !== undefined) {
-      pfs.setTip(customTip.value);
-    }
-  }
-
-  const percentages = [0.25, 0.20, 0.15];
+  const onClick = (event: MouseEvent, percentage: number) => {
+    pfs.setTip(percentage);
+    animateClick(event.currentTarget);
+  };
 </script>
