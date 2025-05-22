@@ -44,6 +44,7 @@
 
   onResult(({ data }) => {    
     pfs.loading = false;
+
     if (data?.readOrder) {
       pfs.order = data.readOrder as OrderFragmentFragment;
     }

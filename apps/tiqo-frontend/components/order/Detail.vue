@@ -63,7 +63,7 @@
       trailing-icon="lucide-arrow-right"
       @click="pfs.nextStage()"
       >
-        Seleccionar {{ formatPrice(pfs.selectedPrice, pfs.order.currencyCode) }}
+        Seleccionar {{ formatPrice(pfs.selectedPriceBeforeTip, pfs.order.currencyCode) }}
     </UButton>
   </div>
 

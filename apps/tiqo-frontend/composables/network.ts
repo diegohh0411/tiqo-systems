@@ -8,8 +8,6 @@ export function tQuery<TResult = unknown, TVariables extends OperationVariables 
 ) {
   const route = useRoute();
 
-  console.log('TQuery');
-
   return useQuery<TResult, TVariables>(
     document,
     variables,

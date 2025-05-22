@@ -35,7 +35,8 @@ export const usePaymentFlowStore = defineStore("paymentFlow", {
       return state.order.lines
         .filter((o) => state.selectedQuantities[o.id] > 0)
     },
-    selectedPrice(state) {
+
+    selectedPriceBeforeTip(state) {
       if (!state.order || state.order.lines.length === 0) {
         return 0;
       }
@@ -77,11 +78,25 @@ export const usePaymentFlowStore = defineStore("paymentFlow", {
     doSelectOrderline(id: string, quantity: number) {
       this.selectedQuantities[id] = quantity;
     },
-    getSelectedOrderline(id: string): { id: string, quantity: number } | null {
-      if (this.selectedQuantities[id] > 0) {
+    getSelectedOrderline(id: string): { id: string, quantity: number, priceToCharge: number } | null {
+      const orderline = this.selectedOrderlines.find(line => line.id === id);
+
+      if (this.order && orderline) {
+        const factor = this.selectedQuantities[orderline.id] / orderline.quantity;
+
+        const orderlinePrice = (orderline.linePrice * factor);
+        const childrenPrices = this.order.lines
+          .filter(line => line.customFields?.parentOrderlineId === orderline.id)
+          .reduce((acc, childOrderline) => {
+            return acc + (childOrderline.linePrice * factor);
+          }, 0);
+
+        console.log({ childrenPrices })
+
         return {
           id,
-          quantity: this.selectedQuantities[id]
+          quantity: this.selectedQuantities[id],
+          priceToCharge: (orderlinePrice + childrenPrices)
         };
       }
 

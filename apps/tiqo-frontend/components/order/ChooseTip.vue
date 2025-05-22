@@ -1,6 +1,6 @@
 <template>
   <div class="grid lg:grid-cols-2 gap-x-2 gap-y-6">
-    <h2 class="col-span-full">Seleccionaste {{ formatPrice(pfs.selectedPrice, pfs.order?.currencyCode) }}</h2>
+    <h2 class="col-span-full">Seleccionaste {{ formatPrice(pfs.selectedPriceBeforeTip, pfs.order?.currencyCode) }}</h2>
     <p class="col-span-full">Elige tu propina</p>
 
     <UButton
@@ -11,7 +11,7 @@
       size="xl"
       @click="pfs.setTip(percentage)"
     >
-      {{ percentage * 100 }}% <span class="opacity-50">{{  formatPrice(pfs.selectedPrice * percentage, pfs.order?.currencyCode) }}</span>
+      {{ percentage * 100 }}% <span class="opacity-50">{{  formatPrice(pfs.selectedPriceBeforeTip * percentage, pfs.order?.currencyCode) }}</span>
     </UButton>
     
     <UInputNumber

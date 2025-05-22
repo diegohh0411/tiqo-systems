@@ -4,9 +4,18 @@
       <h1>Cobra en segundos con Tiqo</h1>
       <h3>El celular de tu comensal es tu nueva terminal</h3>
 
-      <CoreButton to="/interesado" trailing-icon="lucide-arrow-right" class="rounded-full w-fit p-4 !text-neutral-50" size="xl">
-        Quiero cobrar mejor
-      </CoreButton>
+      <UButton
+        to="/demo"
+        trailing-icon="lucide-rocket"
+        class="rounded-full w-fit p-4"
+        size="xl"
+      >
+        Ver demo
+      </UButton>
+
+      <UButton to="/interesado" variant="outline" trailing-icon="lucide-arrow-right" class="rounded-full w-fit p-4" size="xl">
+        Estoy interesado
+      </UButton>
     </div>
 
     <div class="overflow-hidden">
