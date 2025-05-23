@@ -1,10 +1,12 @@
 import { defineStore } from "pinia";
+import { graphql } from "~/codegen/gql";
 import type { OrderFragmentFragment } from "~/codegen/gql/graphql";
 
 export enum PaymentStages {
   SELECTING_ORDERLINES = 'SELECTING_ORDERLINES',
   SELECTING_TIP = 'SELECTING_TIP',
   VIEWING_SUMMARY = 'VIEWING_SUMMARY',
+  CAPTURING_PAYMENT = 'CAPTURING_PAYMENT',
 }
 
 interface PaymentFlowState {
@@ -15,7 +17,7 @@ interface PaymentFlowState {
   }
   percentageOfTip: number;
 
-  fetching: boolean;
+  loading: boolean;
   stage: PaymentStages;
 }
 
@@ -24,7 +26,7 @@ export const usePaymentFlowStore = defineStore("paymentFlow", {
     order: null,
     selectedQuantities: {},
     percentageOfTip: 0.20,
-    fetching: false,
+    loading: false,
     stage: PaymentStages.SELECTING_ORDERLINES
   }),
   getters: {
@@ -76,11 +78,46 @@ export const usePaymentFlowStore = defineStore("paymentFlow", {
     }
   },
   actions: {
+    resetState() {
+      this.order = null;
+      this.selectedQuantities = {};
+      this.percentageOfTip = 0.20;
+      this.loading = false;
+      this.stage = PaymentStages.SELECTING_ORDERLINES;
+    },
+
+    /** Fetches the order with the given code. */
+    fetchOrder(code: string) {
+      this.loading = true;
+
+      const { onResult, onError } = tQuery(
+        graphql(`
+          query ReadOrder($code: String!) {
+            readOrder(code: $code) {
+              ...OrderFragment
+            }
+          }
+        `),
+        { code }
+      );
+
+      onResult(({ data }) => {
+        this.order = data.readOrder as OrderFragmentFragment;
+        this.loading = false;
+      });
+
+      onError(() => {
+        this.loading = false;
+      });
+    },
+
     nextStage() {
       if (this.stage === PaymentStages.SELECTING_ORDERLINES) {
         this.stage = PaymentStages.SELECTING_TIP;
       } else if (this.stage === PaymentStages.SELECTING_TIP) {
         this.stage = PaymentStages.VIEWING_SUMMARY;
+      } else if (this.stage === PaymentStages.VIEWING_SUMMARY) {
+        this.stage = PaymentStages.CAPTURING_PAYMENT;
       }
     },
     prevStage() {
@@ -88,6 +125,8 @@ export const usePaymentFlowStore = defineStore("paymentFlow", {
         this.stage = PaymentStages.SELECTING_ORDERLINES;
       } else if (this.stage === PaymentStages.VIEWING_SUMMARY) {
         this.stage = PaymentStages.SELECTING_TIP;
+      } else if (this.stage === PaymentStages.CAPTURING_PAYMENT) {
+        this.stage = PaymentStages.VIEWING_SUMMARY;
       }
     },
 
@@ -106,8 +145,6 @@ export const usePaymentFlowStore = defineStore("paymentFlow", {
           .reduce((acc, childOrderline) => {
             return acc + (childOrderline.linePrice * factor);
           }, 0);
-
-        console.log({ childrenPrices })
 
         return {
           id,

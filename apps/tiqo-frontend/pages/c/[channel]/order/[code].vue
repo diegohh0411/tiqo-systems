@@ -7,52 +7,30 @@
       @click="pfs.prevStage()"
     />
 
-    <OrderDetail 
-      v-if="pfs.stage === PaymentStages.SELECTING_ORDERLINES"
+    <OrderLoading v-if="pfs.loading" />
+
+    <OrderDetail
+      v-else-if="pfs.stage === PaymentStages.SELECTING_ORDERLINES"
       @continue="pfs.nextStage()"
     />
 
-    <OrderChooseTip v-else-if="pfs.stage === PaymentStages.SELECTING_TIP" />
+    <OrderTip v-else-if="pfs.stage === PaymentStages.SELECTING_TIP" />
 
     <OrderSummary v-else-if="pfs.stage === PaymentStages.VIEWING_SUMMARY" />
+
+    <OrderCharge v-else-if="pfs.stage === PaymentStages.CAPTURING_PAYMENT" />
   </div>
 </template>
 
 <script setup lang="ts">
-  import { graphql } from '~/codegen/gql';
-  import type { OrderFragmentFragment } from '~/codegen/gql/graphql';
-
   const route = useRoute();
+
   let code = route.params.code as string | string[];
   if (Array.isArray(code)) {
     code = code[0];
   }
 
   const pfs = usePaymentFlowStore();
-
-  pfs.loading = true;
-  const { onResult, onError } = tQuery(
-    graphql(`
-      query ReadOrder($code: String!) {
-        readOrder(code: $code) {
-          ...OrderFragment
-        }
-      }
-    `),
-    { code }
-  );
-
-  onResult(({ data }) => {    
-    pfs.loading = false;
-
-    if (data?.readOrder) {
-      pfs.order = data.readOrder as OrderFragmentFragment;
-    }
-  });
-
-  onError((error) => {
-    console.error('Error fetching order:', error);
-    pfs.loading = false;
-  });
-
+  pfs.resetState();
+  pfs.fetchOrder(code);
 </script>

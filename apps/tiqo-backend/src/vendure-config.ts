@@ -1,5 +1,4 @@
 import {
-  dummyPaymentHandler,
   DefaultJobQueuePlugin,
   DefaultSearchPlugin,
   VendureConfig,
@@ -21,6 +20,7 @@ import { TiqoPlugin } from "./plugins/tiqo/tiqo.plugin";
 import { envConfig } from "./env-config";
 
 import { Request, Response, NextFunction } from "express";
+import { AdyenPaymentHandler } from "./plugins/tiqo/payment-handlers/adyen.payment-handler";
 
 Logger.info(`Vendure server running in ${envConfig.ENV} mode`);
 
@@ -88,7 +88,9 @@ export const config: VendureConfig = {
   },
 
   paymentOptions: {
-    paymentMethodHandlers: [dummyPaymentHandler],
+    paymentMethodHandlers: [
+      // AdyenPaymentHandler
+    ],
   },
 
   logger: new DefaultLogger({

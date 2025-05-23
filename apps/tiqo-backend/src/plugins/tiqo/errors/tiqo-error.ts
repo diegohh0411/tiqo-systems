@@ -20,6 +20,9 @@ export enum TiqoErrorCodes {
   // TiqoOrderItemPriceCalculationStrategy errors
   INVALID_EXTERNAL_ORDERLINE = "IEOL", // The External OrderLine is invalid.
   UNHYDRATED_PRODUCTVARIANT = "UHPV", // The ProductVariant's customFields are not hydrated for some reason.
+
+  // Payment handler errors
+  EXPECTED_CHARGE_AMOUNT_MISMATCH = "ECAM", // The expected charge amount sent by the client does not match the calculated amount to charge by the server.
 }
 
 export class StandardError extends InternalServerError {

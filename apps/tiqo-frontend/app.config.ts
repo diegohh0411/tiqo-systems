@@ -1,10 +1,12 @@
 export default defineAppConfig({
   ui: {
     colors: {
-      primary: 'blue'
+      primary: 'blue',
+      neutral: 'neutral',
     },
 
     button: {
+      base: 'cursor-pointer justify-center',
       variants: {
         size: {
           xl: {

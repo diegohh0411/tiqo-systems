@@ -11,6 +11,10 @@ const envSchema = z.object({
   DATABASE_URL: z.string(),
 
   COOKIE_SECRET: z.string().min(32).max(100),
+
+  ADYEN_MERCHANT_ACCOUNT: z.string().min(2).max(100),
+  ADYEN_API_KEY: z.string().min(2).max(100),
+  ADYEN_RETURN_URL: z.string().url(),
 });
 
 const env = envSchema.safeParse(process.env);

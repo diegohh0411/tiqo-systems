@@ -13,6 +13,7 @@
     "start": "concurrently npm:start:*"
   },
   "dependencies": {
+    "@adyen/api-library": "^27.0.0",
     "@nestjs/axios": "^4.0.0",
     "@vendure/admin-ui-plugin": "3.2.3",
     "@vendure/asset-server-plugin": "3.2.3",

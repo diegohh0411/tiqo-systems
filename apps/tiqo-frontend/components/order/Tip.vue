@@ -1,12 +1,15 @@
 <template>
   <div class="grid grid-cols-2 gap-x-2 gap-y-6">
-    <h2 class="col-span-full">Estás por pagar {{ formatPrice(pfs.priceBeforeTip, pfs.order?.currencyCode) }}</h2>
-    <p class="col-span-full">Elige tu propina</p>
+    <h2 class="col-span-full">Elige tu propina</h2>
+    <p class="col-span-full">Seleccionaste {{ formatPrice(pfs.priceBeforeTip, pfs.order?.currencyCode) }}</p>
 
     <UButton
       v-for="(percentage, index) in percentages"
       :key="index"
+
       :variant="pfs.percentageOfTip === percentage ? 'subtle' : 'outline'"
+
+      class="py-4"
       :class="{
         'rounded-full': pfs.percentageOfTip === percentage,
       }"
@@ -16,8 +19,22 @@
     >
       {{ percentage * 100 }}%
     </UButton>
+
+    <UButton
+      :variant="!percentages.includes(pfs.percentageOfTip) ? 'subtle' : 'outline'"
+      class="py-4"
+
+      :class="{
+        'rounded-full': !percentages.includes(pfs.percentageOfTip),
+      }"
+
+      color="neutral"
+      @click="showOtherPercentage = true"
+    >
+      Otro
+    </UButton>
     
-    <UFormField label="Tu propina actual" help="Puedes ingresar tu propia cantidad también" class="col-span-full">
+    <UFormField v-if="showOtherPercentage" label="Ingresa tu propia cantidad" class="col-span-full">
       <UInputNumber
       v-model="pfs.percentageOfTip"
       class="w-full"
@@ -57,7 +74,9 @@
 <script setup lang="ts">
   const pfs = usePaymentFlowStore();
 
-  const percentages = [0.25, 0.20, 0.15, 0.10];
+  const percentages = [0.25, 0.20, 0.15];
+
+  const showOtherPercentage = ref<boolean>(false);
 
   const onClick = (event: MouseEvent, percentage: number) => {
     pfs.setTip(percentage);

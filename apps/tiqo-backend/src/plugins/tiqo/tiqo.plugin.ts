@@ -25,6 +25,7 @@ import { TransposerService } from "./services/transposer/transposer.service";
 import { PluginInitOptions } from "./types";
 import { TiqoOrderItemPriceCalculationStrategy } from "./injectable-strategies/tiqo-order-item-price-calculation.strategy";
 import { OrderShopResolver } from "./api/order/shop.resolver";
+import { AdyenService } from './services/payment-handlers/adyen/adyen.service';
 
 @VendurePlugin({
   imports: [PluginCommonModule, HttpModule],
@@ -38,7 +39,8 @@ import { OrderShopResolver } from "./api/order/shop.resolver";
     TiqoProductVariantService,
     ExternalPosConfigService,
     TiqoChannelService,
-  ],
+      AdyenService,
+],
   configuration: (config) => {
     configureOrderCustomFields(config);
     configureChannelCustomFields(config);

@@ -1,13 +1,12 @@
 <template>
   <div
-  v-if="pfs.order && !pfs.fetching"
+    v-if="pfs.order"
     :class="`
       grid grid-cols-7 gap-2 
       w-full max-w-md
       rounded
       min-h-64
   `">
-
     <h3 class="col-span-full">Orden {{ pfs.order.code }}</h3>
     <p class="col-span-full text-xs mb-6">{{ formatTime(pfs.order.updatedAt) }}</p>
 
@@ -65,14 +64,6 @@
       >
         Seleccionar {{ formatPrice(pfs.priceBeforeTip, pfs.order.currencyCode) }}
     </UButton>
-  </div>
-
-  <div v-else-if="pfs.fetching" class="flex flex-col items-center gap-4">
-    <p>Cargando...</p>
-    <UIcon
-      name="lucide-loader"
-      class="animate-spin size-24"
-    />
   </div>
 
   <div v-else>

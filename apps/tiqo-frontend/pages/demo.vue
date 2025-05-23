@@ -12,9 +12,11 @@
       @continue="pfs.nextStage()"
     />
 
-    <OrderChooseTip v-else-if="pfs.stage === PaymentStages.SELECTING_TIP" />
+    <OrderTip v-else-if="pfs.stage === PaymentStages.SELECTING_TIP" />
 
     <OrderSummary v-else-if="pfs.stage === PaymentStages.VIEWING_SUMMARY" />
+
+    <OrderCharge v-else-if="pfs.stage === PaymentStages.CAPTURING_PAYMENT" />
   </div>
 </template>
 
@@ -23,6 +25,7 @@ import type { CurrencyCode } from '~/codegen/gql/graphql';
 
   const pfs = usePaymentFlowStore();
 
+  pfs.resetState();
   pfs.order = {
     "code": "090125-P-0037",
     "updatedAt": "2025-05-21T08:56:18.348Z",
