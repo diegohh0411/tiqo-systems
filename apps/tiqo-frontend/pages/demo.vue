@@ -16,7 +16,13 @@
 
     <OrderSummary v-else-if="pfs.stage === PaymentStages.VIEWING_SUMMARY" />
 
-    <OrderCharge v-else-if="pfs.stage === PaymentStages.CAPTURING_PAYMENT" />
+    <div v-else-if="pfs.stage === PaymentStages.CAPTURING_PAYMENT" class="flex flex-col gap-6">
+      <h1>¡Gracias por probar nuestra demo!</h1>
+      <p>Nuestra plataforma estará lista pronto y queremos que seas parte del futuro de los pagos en restaurante.</p>
+      <UButton to="/interesado" variant="outline" trailing-icon="lucide-arrow-right" class="rounded-full w-fit p-4" size="xl">
+        Estoy interesado
+      </UButton>
+    </div>
   </div>
 </template>
 

@@ -7,11 +7,11 @@
       v-for="(percentage, index) in percentages"
       :key="index"
 
-      :variant="pfs.percentageOfTip === percentage ? 'subtle' : 'outline'"
+      :variant="pfs.percentageOfTip === percentage && !showOtherPercentage ? 'subtle' : 'outline'"
 
       class="py-4"
       :class="{
-        'rounded-full': pfs.percentageOfTip === percentage,
+        'rounded-full': pfs.percentageOfTip === percentage && !showOtherPercentage,
       }"
 
       color="neutral"
@@ -21,11 +21,11 @@
     </UButton>
 
     <UButton
-      :variant="!percentages.includes(pfs.percentageOfTip) ? 'subtle' : 'outline'"
+      :variant="showOtherPercentage ? 'subtle' : 'outline'"
       class="py-4"
 
       :class="{
-        'rounded-full': !percentages.includes(pfs.percentageOfTip),
+        'rounded-full': showOtherPercentage,
       }"
 
       color="neutral"
@@ -79,6 +79,7 @@
   const showOtherPercentage = ref<boolean>(false);
 
   const onClick = (event: MouseEvent, percentage: number) => {
+    showOtherPercentage.value = false;
     pfs.setTip(percentage);
     animateClick(event.currentTarget);
   };
