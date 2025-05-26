@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { z } from 'zod';
+import "dotenv/config";
 
 const envSchema = z.object({
   ENV: z.enum(['development', 'production', 'staging']),
@@ -12,8 +13,8 @@ const envSchema = z.object({
 
   COOKIE_SECRET: z.string().min(32).max(100),
 
-  ADYEN_MERCHANT_ACCOUNT: z.string().min(2).max(100),
-  ADYEN_API_KEY: z.string().min(2).max(100),
+  ADYEN_MERCHANT_ACCOUNT: z.string().min(2).max(20),
+  ADYEN_API_KEY: z.string().min(2).max(200),
   ADYEN_RETURN_URL: z.string().url(),
 });
 

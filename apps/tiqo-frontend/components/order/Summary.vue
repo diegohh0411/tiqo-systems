@@ -46,45 +46,11 @@
       trailing-icon="lucide-arrow-right"
       @click="pfs.nextStage()"
     >
-      Ir al pago
+      Proceder al pago
     </UButton>
   </div>
 </template>
 
 <script setup lang="ts">
-  
-
   const pfs = usePaymentFlowStore();
-
-  /**
-  import { AdyenCheckout, Card } from '@adyen/adyen-web';
-  
-  const adyenContainer = ref<HTMLElement>();
-
-  const checkout = await AdyenCheckout({
-    session: {
-      id: 'CSD9CAC3...', // Unique identifier for the payment session.
-      sessionData: 'Ab02b4c...' // The payment session data.
-    },
-    environment: 'test', // Change to 'live' for the live environment.
-    amount: {
-      value: 1000,
-      currency: 'EUR'
-    },
-    locale: 'nl-NL',
-    countryCode: 'NL',
-    clientKey: 'test_870be2...', // Public key used for client-side authentication: https://docs.adyen.com/development-resources/client-side-authentication
-    onPaymentCompleted: (result, component) => {
-      console.info(result, component);
-    },
-    onPaymentFailed: (result, component) => {
-      console.info(result, component);
-    },
-    onError: (error, component) => {
-      console.error(error.name, error.message, error.stack, component);
-    }
-  });
-
-  const _cardComponent = new Card(checkout, {}).mount(adyenContainer.value as HTMLElement);
-   */
 </script>

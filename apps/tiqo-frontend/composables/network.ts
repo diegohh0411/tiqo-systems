@@ -24,3 +24,26 @@ export function tQuery<TResult = unknown, TVariables extends OperationVariables 
     }
   )
 }
+
+export function tMutation<TResult = unknown, TVariables extends OperationVariables = Record<string, unknown>>(
+  document: DocumentNode | TypedDocumentNode<TResult, TVariables>,
+  variables: TVariables = {} as TVariables,
+  options?: object
+) {
+  const route = useRoute();
+
+  return useMutation<TResult, TVariables>(
+    document,
+    {
+      context: {
+        headers: {
+          'vendure-token': route.params.channel,
+        }
+      },
+      errorPolicy: 'all',
+      fetchPolicy: 'no-cache',
+      variables,
+      ...options
+    }
+  )
+}

@@ -14,13 +14,11 @@ import {
 } from "@vendure/email-plugin";
 import { AssetServerPlugin } from "@vendure/asset-server-plugin";
 import { AdminUiPlugin } from "@vendure/admin-ui-plugin";
-import "dotenv/config";
 import path from "path";
 import { TiqoPlugin } from "./plugins/tiqo/tiqo.plugin";
 import { envConfig } from "./env-config";
 
 import { Request, Response, NextFunction } from "express";
-import { AdyenPaymentHandler } from "./plugins/tiqo/payment-handlers/adyen.payment-handler";
 
 Logger.info(`Vendure server running in ${envConfig.ENV} mode`);
 
@@ -94,7 +92,7 @@ export const config: VendureConfig = {
   },
 
   logger: new DefaultLogger({
-    level: envConfig.ENV === "production" ? LogLevel.Info : LogLevel.Debug,
+    level: envConfig.ENV === "production" ? LogLevel.Info : LogLevel.Verbose,
   }),
   // When adding or altering custom field definitions, the database will
   // need to be updated. See the "Migrations" section in README.md.

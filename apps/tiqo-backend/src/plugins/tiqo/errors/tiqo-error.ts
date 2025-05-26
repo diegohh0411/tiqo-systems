@@ -23,6 +23,7 @@ export enum TiqoErrorCodes {
 
   // Payment handler errors
   EXPECTED_CHARGE_AMOUNT_MISMATCH = "ECAM", // The expected charge amount sent by the client does not match the calculated amount to charge by the server.
+  ADYEN_SESSION_CREATION_FAILED = "ASCF", // The Adyen session creation failed.
 }
 
 export class StandardError extends InternalServerError {

@@ -26,6 +26,7 @@ import { PluginInitOptions } from "./types";
 import { TiqoOrderItemPriceCalculationStrategy } from "./injectable-strategies/tiqo-order-item-price-calculation.strategy";
 import { OrderShopResolver } from "./api/order/shop.resolver";
 import { AdyenService } from './services/payment-handlers/adyen/adyen.service';
+import { AdyenShopResolver } from "./api/payment-handlers/adyen/shop.resolver";
 
 @VendurePlugin({
   imports: [PluginCommonModule, HttpModule],
@@ -39,8 +40,8 @@ import { AdyenService } from './services/payment-handlers/adyen/adyen.service';
     TiqoProductVariantService,
     ExternalPosConfigService,
     TiqoChannelService,
-      AdyenService,
-],
+    AdyenService,
+  ],
   configuration: (config) => {
     configureOrderCustomFields(config);
     configureChannelCustomFields(config);
@@ -55,18 +56,28 @@ import { AdyenService } from './services/payment-handlers/adyen/adyen.service';
     return config;
   },
   compatibility: "^3.0.0",
-  entities: [Table, ExternalPosConfig],
+  entities: [
+    Table,
+    ExternalPosConfig
+  ],
   shopApiExtensions: {
     schema: shopExtensions,
-    resolvers: [TableShopResolver, OrderShopResolver],
+    resolvers: [
+      TableShopResolver,
+      OrderShopResolver,
+      AdyenShopResolver
+    ],
   },
   adminApiExtensions: {
     schema: adminExtensions,
-    resolvers: [TableAdminResolver, ExternalPosConfigAdminResolver],
+    resolvers: [
+      TableAdminResolver,
+      ExternalPosConfigAdminResolver
+    ],
   },
 })
 export class TiqoPlugin {
-  constructor() {}
+  constructor() { }
 
   static options: PluginInitOptions;
 
