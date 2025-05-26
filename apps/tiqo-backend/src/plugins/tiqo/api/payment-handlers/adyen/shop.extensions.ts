@@ -8,7 +8,7 @@ export const adyenShopExtensions = gql`
     expectedChargeAmount: Float!
   }
   
-  union CreateAdyenSessionResult = CreatePaymentResult | CreatePaymentResultError
+  union CreateAdyenSessionResult = CreatePaymentResult | CreatePaymentErrorResult
 
   extend type Mutation {
     createAdyenSession(input: CreateSessionInput!): CreateAdyenSessionResult!
