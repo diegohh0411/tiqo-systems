@@ -34,4 +34,4 @@ export const adyenPaymentHandler = new PaymentMethodHandler({
 
   cancelPayment: async (ctx, order, payment, args): Promise<CancelPaymentResult | CancelPaymentErrorResult> => { },
 })
-*/
+   */

@@ -7,10 +7,8 @@ export const adyenShopExtensions = gql`
     tipPercentage: Float!
     expectedChargeAmount: Float!
   }
-  
-  union CreateAdyenSessionResult = CreatePaymentResult | CreatePaymentErrorResult
 
   extend type Mutation {
-    createAdyenSession(input: CreateSessionInput!): CreateAdyenSessionResult!
+    createAdyenSession(input: CreateSessionInput!): JSON
   }
 `

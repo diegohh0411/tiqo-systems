@@ -8,23 +8,29 @@
 
 <script setup lang="ts">
   import { graphql } from "~/codegen/gql";
+  const pfs = usePaymentFlowStore();
 
-  tMutation(
+  const { mutate } = tMutation(
     graphql(`
       mutation CreateSession($input: CreateSessionInput!) {
-        createAdyenSession(input: $input) {
-          ... on CreatePaymentResult {
-            amount
-            state
-            transactionId
-          }
-
-          .. on CreatePaymentResultError {
-            message
-          }
-        }
+        createAdyenSession(input: $input)
       }
     `)
   )
+
+  mutate({
+    input: {
+      orderCode: pfs.order?.code || "",
+      selectedOrderlines: pfs.selectedOrderlines,
+      tipPercentage: pfs.percentageOfTip,
+      expectedChargeAmount: pfs.priceOfTip,
+    },
+  })
+    .then((response) => {
+      console.log("Session created:", response);
+    })
+    .catch((error) => {
+      console.error("Error creating session:", error);
+    });
 
 </script>

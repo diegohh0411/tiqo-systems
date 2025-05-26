@@ -16,6 +16,7 @@ import type { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-
 type Documents = {
     "\n  fragment OrderFragment on Order {\n    code\n    updatedAt\n    totalWithTax\n    currencyCode\n    lines {\n      id\n      customFields {\n        extId\n        extName\n        extSku\n        extUnitCost\n        parentOrderlineId\n        hasBeenPaidFor\n      }\n      linePrice\n      quantity\n    }\n  }\n": typeof types.OrderFragmentFragmentDoc,
     "\n    fragment TableFragment on Table {\n      id\n      extName\n      orders {\n        id\n        code\n        total\n        currencyCode\n        createdAt\n      }\n    }\n  ": typeof types.TableFragmentFragmentDoc,
+    "\n      mutation CreateSession($input: CreateSessionInput!) {\n        createAdyenSession(input: $input)\n      }\n    ": typeof types.CreateSessionDocument,
     "\n          mutation Login($username: String!, $password: String!, $rememberMe: Boolean!) {\n            login(username: $username, password: $password, rememberMe: $rememberMe) {\n              ... on CurrentUser {\n                id\n                identifier\n              }\n\n              ... on InvalidCredentialsError {\n                message\n              }\n            }\n          }\n      ": typeof types.LoginDocument,
     "\n      mutation Logout {\n        logout {\n          success\n        }\n      }\n    ": typeof types.LogoutDocument,
     "\n          query ReadOrder($code: String!) {\n            readOrder(code: $code) {\n              ...OrderFragment\n            }\n          }\n        ": typeof types.ReadOrderDocument,
@@ -25,6 +26,7 @@ type Documents = {
 const documents: Documents = {
     "\n  fragment OrderFragment on Order {\n    code\n    updatedAt\n    totalWithTax\n    currencyCode\n    lines {\n      id\n      customFields {\n        extId\n        extName\n        extSku\n        extUnitCost\n        parentOrderlineId\n        hasBeenPaidFor\n      }\n      linePrice\n      quantity\n    }\n  }\n": types.OrderFragmentFragmentDoc,
     "\n    fragment TableFragment on Table {\n      id\n      extName\n      orders {\n        id\n        code\n        total\n        currencyCode\n        createdAt\n      }\n    }\n  ": types.TableFragmentFragmentDoc,
+    "\n      mutation CreateSession($input: CreateSessionInput!) {\n        createAdyenSession(input: $input)\n      }\n    ": types.CreateSessionDocument,
     "\n          mutation Login($username: String!, $password: String!, $rememberMe: Boolean!) {\n            login(username: $username, password: $password, rememberMe: $rememberMe) {\n              ... on CurrentUser {\n                id\n                identifier\n              }\n\n              ... on InvalidCredentialsError {\n                message\n              }\n            }\n          }\n      ": types.LoginDocument,
     "\n      mutation Logout {\n        logout {\n          success\n        }\n      }\n    ": types.LogoutDocument,
     "\n          query ReadOrder($code: String!) {\n            readOrder(code: $code) {\n              ...OrderFragment\n            }\n          }\n        ": types.ReadOrderDocument,
@@ -54,6 +56,10 @@ export function graphql(source: "\n  fragment OrderFragment on Order {\n    code
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n    fragment TableFragment on Table {\n      id\n      extName\n      orders {\n        id\n        code\n        total\n        currencyCode\n        createdAt\n      }\n    }\n  "): (typeof documents)["\n    fragment TableFragment on Table {\n      id\n      extName\n      orders {\n        id\n        code\n        total\n        currencyCode\n        createdAt\n      }\n    }\n  "];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n      mutation CreateSession($input: CreateSessionInput!) {\n        createAdyenSession(input: $input)\n      }\n    "): (typeof documents)["\n      mutation CreateSession($input: CreateSessionInput!) {\n        createAdyenSession(input: $input)\n      }\n    "];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

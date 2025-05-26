@@ -75,12 +75,12 @@ export class AdyenService {
                 amount: adyenResponse.amount.value,
                 transactionId: adyenResponse.reference
             }
-        } catch {
+        } catch (e) {
             return {
                 amount: input.expectedChargeAmount,
                 state: 'Error' as const,
                 transactionId: paymentReference,
-                errorMessage: TiqoErrorCodes.ADYEN_SESSION_CREATION_FAILED
+                errorMessage: JSON.stringify(e) || TiqoErrorCodes.ADYEN_SESSION_CREATION_FAILED
             }
         }
     }
