@@ -1,24 +1,15 @@
 <template>
   <div class="w-full max-w-lg mx-auto flex flex-col gap-6">
-    <UIcon 
-      v-if="pfs.stage !== PaymentStages.SELECTING_ORDERLINES" 
-      name="lucide-arrow-left"
-      
-      @click="pfs.prevStage()"
-    />
-
-    <OrderLoading v-if="pfs.loading" />
+    <OrderHeader />
 
     <OrderDetail
-      v-else-if="pfs.stage === PaymentStages.SELECTING_ORDERLINES"
+      v-if="pfs.stage === PaymentStages.SELECTING_ORDERLINES"
       @continue="pfs.nextStage()"
     />
 
     <OrderTip v-else-if="pfs.stage === PaymentStages.SELECTING_TIP" />
 
-    <OrderSummary v-else-if="pfs.stage === PaymentStages.VIEWING_SUMMARY" />
-
-    <OrderCharge v-else-if="pfs.stage === PaymentStages.CAPTURING_PAYMENT" />
+    <OrderCheckout v-else-if="pfs.stage === PaymentStages.CAPTURING_PAYMENT" />
   </div>
 </template>
 

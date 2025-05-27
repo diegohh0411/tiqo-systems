@@ -2,7 +2,7 @@
   <div
     :class="`
       flex items-center justify-between
-      py-6 border-t
+      mt-24 py-6 border-t
       w-full
   `" >
       <div class="flex items-center justify-between page-width page-padding-x text-sm">

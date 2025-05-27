@@ -40,17 +40,72 @@
     <div ref="adyenContainer" class="col-span-full" />
 
     <UButton
+      v-if="adyenCheckoutObject === null"
       class="col-span-full"
       size="xl"
       :disabled="pfs.selectedOrderlines.length == 0"
+      :loading="pfs.loading"
       trailing-icon="lucide-arrow-right"
-      @click="pfs.nextStage()"
+      @click="requestAdyenSession"
     >
       Proceder al pago
     </UButton>
+
+    <USeparator v-else class="my-6" icon="lucide-credit-card" />
+
+    <div ref="adyenCardContainer" />
   </div>
 </template>
 
 <script setup lang="ts">
+  import { graphql } from "~/codegen/gql";
+  import { AdyenCheckout, Card, type ICore } from "@adyen/adyen-web";
+  import '@adyen/adyen-web/styles/adyen.css';
+
   const pfs = usePaymentFlowStore();
+  
+  const adyenCardContainer = ref<HTMLDivElement | null>(null);
+  const adyenCheckoutObject = ref<ICore | null>(null);
+
+  const { mutate } = tMutation(
+    graphql(`
+      mutation CreateSession($input: CreateSessionInput!) {
+        createAdyenSession(input: $input)
+      }
+    `)
+  )
+
+  const requestAdyenSession = async () => {
+    pfs.loading = true;
+
+    const response = await mutate({
+      input: {
+        orderCode: pfs.order?.code || "",
+        selectedQuantities: pfs.selectedQuantities,
+        tipPercentage: pfs.percentageOfTip,
+        expectedChargeAmount: pfs.priceAfterTip,
+      },
+    })
+
+    if (response?.data?.createAdyenSession && adyenCardContainer.value) {
+      const data = response.data.createAdyenSession;
+
+      const globalConfig = {
+        session: {
+          id: data.id,
+          sessionData: data.sessionData,
+        },
+        environment: "test" as const,
+        amount: data.amount,
+        locale: 'es-MX',
+        countryCode: 'MX',
+        clientKey: "test_W3BHRZD6TNBGFMSUAGGDHNCXSMVGIUFR"
+      }
+
+      adyenCheckoutObject.value = await AdyenCheckout(globalConfig);
+      new Card(unref(adyenCheckoutObject) as ICore, {}).mount(adyenCardContainer.value); // Asserting that adyenCheckoutObject is not null
+    }
+
+    pfs.loading = false;
+  }
 </script>

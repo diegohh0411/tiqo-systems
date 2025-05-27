@@ -1,28 +1,16 @@
 <template>
   <div class="w-full max-w-lg mx-auto flex flex-col gap-6">
-    <UIcon 
-      v-if="pfs.stage !== PaymentStages.SELECTING_ORDERLINES" 
-      name="lucide-arrow-left"
-      
-      @click="pfs.prevStage()"
-    />
+    <OrderHeader />
 
-    <OrderDetail 
+    <OrderDetail
       v-if="pfs.stage === PaymentStages.SELECTING_ORDERLINES"
       @continue="pfs.nextStage()"
     />
 
     <OrderTip v-else-if="pfs.stage === PaymentStages.SELECTING_TIP" />
 
-    <OrderSummary v-else-if="pfs.stage === PaymentStages.VIEWING_SUMMARY" />
+    <OrderCheckout v-else-if="pfs.stage === PaymentStages.CAPTURING_PAYMENT" />
 
-    <div v-else-if="pfs.stage === PaymentStages.CAPTURING_PAYMENT" class="flex flex-col gap-6">
-      <h1>¡Gracias por probar nuestra demo!</h1>
-      <p>Nuestra plataforma estará lista pronto y queremos que seas parte del futuro de los pagos en restaurante.</p>
-      <UButton to="/interesado" variant="outline" trailing-icon="lucide-arrow-right" class="rounded-full w-fit p-4" size="xl">
-        Estoy interesado
-      </UButton>
-    </div>
   </div>
 </template>
 

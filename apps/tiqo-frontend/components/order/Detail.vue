@@ -1,4 +1,6 @@
 <template>
+  <OrderDetailSkeleton v-if="pfs.loading" />
+
   <div
     v-if="pfs.order"
     :class="`
@@ -66,7 +68,7 @@
     </UButton>
   </div>
 
-  <div v-else>
+  <div v-else-if="!pfs.loading">
     <UAlert
       title="Oh oh"
       description="No hemos podido encontrar tu orden"
