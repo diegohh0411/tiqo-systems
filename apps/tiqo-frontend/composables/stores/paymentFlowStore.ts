@@ -69,7 +69,7 @@ export const usePaymentFlowStore = defineStore("paymentFlow", {
     },
 
     /** The price selected by the user after the tip. */
-    priceWithTip(): number {
+    priceAfterTip(): number {
       return this.priceBeforeTip + this.priceOfTip;
     },
 

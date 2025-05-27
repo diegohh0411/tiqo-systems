@@ -1,8 +1,8 @@
-import { Inject, Injectable } from "@nestjs/common";
+import { Inject, Injectable, UnprocessableEntityException } from "@nestjs/common";
 import { Logger, RequestContext } from "@vendure/core";
 import { TIQO_PLUGIN_OPTIONS } from "../../constants";
 import { ChannelPosProvider } from "../../entities/external-pos-config.entity";
-import { StandardError, TiqoErrorCodes } from "../../errors/tiqo-error";
+import { TiqoErrors, TiqoErrorString } from "../../errors/tiqo-error";
 import { PluginInitOptions } from "../../types";
 import { TiqoChannelService } from "../channel/tiqo-channel.service";
 import { ParrotPosAdapter } from "./parrot.pos-adapter.service";
@@ -13,7 +13,7 @@ export class TransposerService {
     @Inject(TIQO_PLUGIN_OPTIONS) private options: PluginInitOptions,
     private parrotPosAdapter: ParrotPosAdapter,
     private channelService: TiqoChannelService,
-  ) {}
+  ) { }
 
   private static loggerCtx = "TransposerService";
 
@@ -42,7 +42,7 @@ export class TransposerService {
         );
         return true;
       default:
-        throw new StandardError(TiqoErrorCodes.INVALID_POS_PROVIDER);
+        throw new UnprocessableEntityException(TiqoErrorString(ctx, TiqoErrors.INVALID_POS_PROVIDER));
     }
   }
 }

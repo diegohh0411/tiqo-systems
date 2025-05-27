@@ -3,7 +3,7 @@ import { gql } from "graphql-tag";
 export const adyenShopExtensions = gql`
   input CreateSessionInput {
     orderCode: String!
-    selectedOrderlines: JSON!
+    selectedQuantities: JSON!
     tipPercentage: Float!
     expectedChargeAmount: Float!
   }

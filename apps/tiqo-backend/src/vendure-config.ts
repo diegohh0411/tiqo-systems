@@ -18,8 +18,6 @@ import path from "path";
 import { TiqoPlugin } from "./plugins/tiqo/tiqo.plugin";
 import { envConfig } from "./env-config";
 
-import { Request, Response, NextFunction } from "express";
-
 Logger.info(`Vendure server running in ${envConfig.ENV} mode`);
 
 export const config: VendureConfig = {
@@ -27,17 +25,6 @@ export const config: VendureConfig = {
     port: envConfig.PORT,
     adminApiPath: "admin-api",
     shopApiPath: "shop-api",
-
-    middleware: [
-      {
-        handler: (req: Request, res: Response, next: NextFunction) => {
-          console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`)
-          next();
-        },
-        route: "/",
-      }
-    ],
-
 
     // The following options are useful in development mode,
     // but are best turned off for production for security
@@ -92,7 +79,7 @@ export const config: VendureConfig = {
   },
 
   logger: new DefaultLogger({
-    level: envConfig.ENV === "production" ? LogLevel.Info : LogLevel.Verbose,
+    level: envConfig.ENV === "production" ? LogLevel.Info : LogLevel.Debug,
   }),
   // When adding or altering custom field definitions, the database will
   // need to be updated. See the "Migrations" section in README.md.

@@ -8,7 +8,7 @@ import {
   UpdateTableDto,
 } from "./table.dto";
 import { Table } from "../../entities/table.entity";
-import { debug, DebugAction } from "../../debug.logging";
+import { Debug, DebugAction } from "../../debug.logging";
 
 @Injectable()
 export class TableService {
@@ -31,7 +31,7 @@ export class TableService {
   }
 
   async readTable(ctx: RequestContext, dto: ReadTableDto) {
-    debug(
+    Debug(
       DebugAction.EXECUTING,
       `function 'readTable' with dto: ${JSON.stringify(dto)}`,
       this.loggerCtx,
@@ -83,7 +83,7 @@ export class TableService {
   }
 
   async findOneOrCreateIt(ctx: RequestContext, args: FindOneOrCreateItDto) {
-    debug(
+    Debug(
       DebugAction.EXECUTING,
       `function 'findOneOrCreateIt' with args: ${JSON.stringify(args)}`,
       this.loggerCtx,
@@ -98,7 +98,7 @@ export class TableService {
     });
 
     if (existingTable) {
-      debug(
+      Debug(
         DebugAction.FOUND,
         `table with extId ${args.extId}`,
         this.loggerCtx,
@@ -106,7 +106,7 @@ export class TableService {
       return existingTable;
     }
 
-    debug(
+    Debug(
       DebugAction.DIDNT_FIND,
       `table with extId ${args.extId}, creating it`,
       this.loggerCtx,

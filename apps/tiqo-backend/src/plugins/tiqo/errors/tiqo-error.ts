@@ -1,33 +1,75 @@
-import { InternalServerError } from "@vendure/core";
+import { LanguageCode, RequestContext } from "@vendure/core";
 
-export enum TiqoErrorCodes {
+type ValueOf<T> = T[keyof T];
+
+export const TiqoErrors = {
   // Generic errors
-  UNKNOWN_ERROR = "UNKN", // An unknown error occurred.
+  UNKNOWN_ERROR: {
+    [LanguageCode.es]: "Ocurrió un error desconocido.",
+    [LanguageCode.en]: "An unknown error occurred.",
+  },
 
   // Resource related errors
-  NOT_FOUND = "NOTF", // The requested resource was not found.
-  ALREADY_EXISTS = "ALRE", // The resource already exists.
+  NOT_FOUND: {
+    [LanguageCode.es]: "Recurso no encontrado.",
+    [LanguageCode.en]: "Resource not found.",
+  },
+  ALREADY_EXISTS: {
+    [LanguageCode.es]: "El recurso ya existe.",
+    [LanguageCode.en]: "The resource already exists.",
+  },
 
   // TiqoProductVariant Service errors
-  MORE_THAN_ONE_ESDPV = "MTOES", // More than one External System Dummy Product Variant was found for the channel.
+  MORE_THAN_ONE_ESDPV: {
+    [LanguageCode.es]: "Se encontró más de una variante de producto dummy de sistema externo para el canal.",
+    [LanguageCode.en]: "More than one External System Dummy Product Variant was found for the channel.",
+  },
 
   // Transposer Service related errors
-  INVALID_POS_PROVIDER = "IVPP", // The POS provider for the channel is not supported or undefined.
-  UNREACHABLE_POS_PROVIDER = "URPP", // The POS provider for the channel is unreachable.
-  INVALID_RESOURCE_REFERENCE = "IRRF", // The resource reference is invalid, it does not exist.
-  CURRENCY_CODE_MISMATCH = "CCMM", // An order line's currency code does not match the order's.
+  INVALID_POS_PROVIDER: {
+    [LanguageCode.es]: "El canal no tiene configurado un proveedor de POS válido.",
+    [LanguageCode.en]: "The channel does not have a valid POS provider configured.",
+  },
+  UNREACHABLE_POS_PROVIDER: {
+    [LanguageCode.es]: "El proveedor de POS para el canal está fuera de línea.",
+    [LanguageCode.en]: "The POS provider for the channel is offline.",
+  },
+  INVALID_ORDERLINE_REFERENCE: {
+    [LanguageCode.es]: "La referencia de la línea de pedido no existe o no es válida.",
+    [LanguageCode.en]: "The order line reference does not exist or is invalid.",
+  },
+  INVALID_ORDER_REFERENCE: {
+    [LanguageCode.es]: "La referencia del pedido no existe o no es válida.",
+    [LanguageCode.en]: "The order reference does not exist or is invalid.",
+  },
+  CURRENCY_CODE_MISMATCH: {
+    [LanguageCode.es]: "El uso de un mismo código de moneda no fue consistente en esta transacción.",
+    [LanguageCode.en]: "The use of the same currency code was not consistent in this transaction.",
+  },
 
   // TiqoOrderItemPriceCalculationStrategy errors
-  INVALID_EXTERNAL_ORDERLINE = "IEOL", // The External OrderLine is invalid.
-  UNHYDRATED_PRODUCTVARIANT = "UHPV", // The ProductVariant's customFields are not hydrated for some reason.
+  INVALID_EXTERNAL_ORDERLINE: {
+    [LanguageCode.es]: "La línea de pedido externa no es válida.",
+    [LanguageCode.en]: "The external order line is invalid.",
+  },
+
+  UNHYDRATED_PRODUCTVARIANT: {
+    [LanguageCode.es]: "La variante de producto no existe o no está hidratada con los datos que se necesitan.",
+    [LanguageCode.en]: "The product variant does not exist or is not hydrated with the data that is needed.",
+  },
 
   // Payment handler errors
-  EXPECTED_CHARGE_AMOUNT_MISMATCH = "ECAM", // The expected charge amount sent by the client does not match the calculated amount to charge by the server.
-  ADYEN_SESSION_CREATION_FAILED = "ASCF", // The Adyen session creation failed.
+  EXPECTED_CHARGE_AMOUNT_MISMATCH: {
+    [LanguageCode.es]: "El importe de la orden calculado por el servidor no coincide con el importe calculado por el cliente.",
+    [LanguageCode.en]: "The order amount calculated by the server does not match the amount calculated by the client.",
+  },
+
+  ADYEN_SESSION_CREATION_FAILED: {
+    [LanguageCode.es]: "No se pudo crear una sesión de pago de Adyen.",
+    [LanguageCode.en]: "Failed to create an Adyen payment session.",
+  }
 }
 
-export class StandardError extends InternalServerError {
-  constructor(code: TiqoErrorCodes) {
-    super(code);
-  }
+export const TiqoErrorString = (ctx: RequestContext, error: ValueOf<typeof TiqoErrors>): string => {
+  return error[ctx.languageCode as keyof typeof error] || error[LanguageCode.en];
 }

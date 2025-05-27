@@ -3,10 +3,11 @@ import {
   Order,
   PriceCalculationResult,
   ProductVariant,
-  RequestContext,
+  RequestContext
 } from "@vendure/core";
-import { StandardError, TiqoErrorCodes } from "../errors/tiqo-error";
-import { debug, DebugAction } from "../debug.logging";
+import { UnprocessableEntityException } from "@nestjs/common";
+import { TiqoErrorString, TiqoErrors } from "../errors/tiqo-error";
+import { Debug, DebugAction } from "../debug.logging";
 
 export class TiqoOrderItemPriceCalculationStrategy {
   private loggerCtx = "TiqoOrderItemPriceCalculationStrategy";
@@ -24,27 +25,28 @@ export class TiqoOrderItemPriceCalculationStrategy {
       productVariant.customFields.isExternalSystemDummyProductVariant ===
       undefined
     ) {
-      throw new StandardError(TiqoErrorCodes.UNHYDRATED_PRODUCTVARIANT);
+      throw new UnprocessableEntityException(TiqoErrorString(ctx, TiqoErrors.UNHYDRATED_PRODUCTVARIANT));
     }
 
     if (productVariant.customFields.isExternalSystemDummyProductVariant) {
-      return this.calculateForESDPV(orderLineCustomFields);
+      return this.calculateForESDPV(ctx, orderLineCustomFields);
     } else {
       return this.calculateAsDefault(productVariant);
     }
   }
 
   private calculateForESDPV(
+    ctx: RequestContext,
     orderLineCustomFields: CustomOrderLineFields,
   ): PriceCalculationResult | Promise<PriceCalculationResult> {
     const { extUnitPrice, extAmountsIncludeTax, extSku } =
       orderLineCustomFields;
 
     if (extUnitPrice === null || extAmountsIncludeTax === null) {
-      throw new StandardError(TiqoErrorCodes.INVALID_EXTERNAL_ORDERLINE);
+      throw new UnprocessableEntityException(TiqoErrorString(ctx, TiqoErrors.INVALID_EXTERNAL_ORDERLINE));
     }
 
-    debug(
+    Debug(
       DebugAction.CALCULATING,
       `price for sku:${extSku} to be ${extUnitPrice}`,
       this.loggerCtx,

@@ -29,7 +29,7 @@ export default defineConfig([
         },
         {
           selector: "variable",
-          format: ["camelCase", "UPPER_CASE"],
+          format: ["camelCase", "UPPER_CASE", "PascalCase"],
           modifiers: ["const"],
           leadingUnderscore: "allow",
         },
@@ -40,7 +40,7 @@ export default defineConfig([
 
         {
           selector: "property",
-          format: ["camelCase"],
+          format: ["camelCase", "UPPER_CASE"],
           modifiers: ["public"],
           filter: {
             regex: "^[a-zA-Z_][a-zA-Z0-9_]*$",

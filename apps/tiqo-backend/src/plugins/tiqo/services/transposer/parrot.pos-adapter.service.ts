@@ -1,9 +1,10 @@
 import { HttpService } from "@nestjs/axios";
-import { BadRequestException, Injectable } from "@nestjs/common";
+import { BadRequestException, Injectable, UnprocessableEntityException } from "@nestjs/common";
 import {
   Channel,
   CustomOrderLineFields,
   ID,
+  InternalServerError,
   Logger,
   Order,
   ProductVariant,
@@ -12,7 +13,7 @@ import {
 } from "@vendure/core";
 import { AxiosResponse } from "axios";
 import { firstValueFrom } from "rxjs";
-import { StandardError, TiqoErrorCodes } from "../../errors/tiqo-error";
+import { TiqoErrorString, TiqoErrors } from "../../errors/tiqo-error";
 import { SystemOfOrigin } from "../../global-configurations/order.configuration";
 import { TiqoProductVariantService } from "../product-variant/tiqo-product-variant.service";
 import { TiqoProductService } from "../product/tiqo-product.service";
@@ -26,7 +27,7 @@ import {
   ListOrdersResponse,
   ParrotOrderItem,
 } from "./parrot.types";
-import { debug, DebugAction } from "../../debug.logging";
+import { Debug, DebugAction } from "../../debug.logging";
 
 /**
  * Adapter for the Parrot POS API.
@@ -72,7 +73,7 @@ export class ParrotPosAdapter {
   };
 
   async syncOrders(ctx: RequestContext) {
-    debug(
+    Debug(
       DebugAction.EXECUTING,
       `function 'syncOrders' for channel ${ctx.channel.code}`,
       ParrotPosAdapter.loggerCtx,
@@ -97,7 +98,7 @@ export class ParrotPosAdapter {
       );
     } catch (error) {
       Logger.error(JSON.stringify(error), ParrotPosAdapter.loggerCtx);
-      throw new StandardError(TiqoErrorCodes.UNREACHABLE_POS_PROVIDER);
+      throw new InternalServerError(TiqoErrorString(ctx, TiqoErrors.UNREACHABLE_POS_PROVIDER));
     }
 
     const externalOrdersWithTable = response.data.data.filter(
@@ -107,17 +108,17 @@ export class ParrotPosAdapter {
     );
 
     if (externalOrdersWithTable.length === 0) {
-      debug(
+      Debug(
         DebugAction.DIDNT_FIND,
         `orders with table`,
         ParrotPosAdapter.loggerCtx,
       );
       return;
     }
-    debug(DebugAction.FOUND, `orders with table`, ParrotPosAdapter.loggerCtx);
+    Debug(DebugAction.FOUND, `orders with table`, ParrotPosAdapter.loggerCtx);
 
     for (const externalOrder of externalOrdersWithTable) {
-      debug(
+      Debug(
         DebugAction.EXECUTING,
         `order synchronization for external order ${externalOrder.orderReference}`,
         ParrotPosAdapter.loggerCtx,
@@ -169,7 +170,6 @@ export class ParrotPosAdapter {
    * @param parentUuid - The UUID of the parent order item.
    * @param orderItems - The list of all order items from the external system.
    * @returns A promise that resolves when the add-on has been ensured.
-   * @throws StandardError If the parent order item is not found or other errors occur during processing.
    */
   private async makeSureAddOnExists(
     ctx: RequestContext,
@@ -178,7 +178,7 @@ export class ParrotPosAdapter {
     parentUuid: ID,
     orderItems: ParrotOrderItem[],
   ) {
-    debug(
+    Debug(
       DebugAction.EXECUTING,
       `function 'makeSureAddOnExists'`,
       ParrotPosAdapter.loggerCtx,
@@ -193,14 +193,14 @@ export class ParrotPosAdapter {
         `Parent line not found for uuid ${parentUuid}`,
         ParrotPosAdapter.loggerCtx,
       );
-      throw new StandardError(TiqoErrorCodes.INVALID_RESOURCE_REFERENCE);
+      throw new UnprocessableEntityException(TiqoErrorString(ctx, TiqoErrors.INVALID_ORDERLINE_REFERENCE));
     }
 
     const addOns = orderItems.filter(
       (orderItem) =>
         orderItem.parentUuid === parentUuid && orderItem.itemType === "ADD_ON",
     );
-    debug(
+    Debug(
       DebugAction.FOUND,
       `${addOns.length} add-ons for item ${parentUuid}`,
       ParrotPosAdapter.loggerCtx,
@@ -213,7 +213,7 @@ export class ParrotPosAdapter {
     const totalMissingModifierPrice =
       (parentItem.totalModifierPrice - totalCalculatedModifierPrice) * 100;
 
-    debug(
+    Debug(
       DebugAction.CALCULATING,
       `that the missing modifier price is ${totalMissingModifierPrice}`,
       ParrotPosAdapter.loggerCtx,
@@ -232,7 +232,7 @@ export class ParrotPosAdapter {
         `Order not found for code ${order.code}`,
         ParrotPosAdapter.loggerCtx,
       );
-      throw new StandardError(TiqoErrorCodes.INVALID_RESOURCE_REFERENCE);
+      throw new UnprocessableEntityException(TiqoErrorString(ctx, TiqoErrors.INVALID_ORDER_REFERENCE));
     }
 
     const parentLine = refreshedOrder.lines.find(line => line.customFields.extId === parentUuid);
@@ -244,7 +244,7 @@ export class ParrotPosAdapter {
     );
 
     if (existingLine) {
-      debug(
+      Debug(
         DebugAction.UPDATING,
         `existing line for missing modifier price`,
         ParrotPosAdapter.loggerCtx,
@@ -266,7 +266,7 @@ export class ParrotPosAdapter {
         customFields,
       );
     } else {
-      debug(
+      Debug(
         DebugAction.CREATING,
         `a new line for missing modifier price`,
         ParrotPosAdapter.loggerCtx,
@@ -304,7 +304,7 @@ export class ParrotPosAdapter {
       );
     }
 
-    debug(
+    Debug(
       DebugAction.EXITING,
       `function 'makeSureAddOnExists'`,
       ParrotPosAdapter.loggerCtx,
@@ -351,7 +351,7 @@ export class ParrotPosAdapter {
   }
 
   async syncOrderItems(ctx: RequestContext) {
-    debug(
+    Debug(
       DebugAction.EXECUTING,
       `function 'syncOrderItems' for channel ${ctx.channel.code}`,
       ParrotPosAdapter.loggerCtx,
@@ -376,7 +376,7 @@ export class ParrotPosAdapter {
       );
     } catch (error) {
       Logger.error(JSON.stringify(error), ParrotPosAdapter.loggerCtx);
-      throw new StandardError(TiqoErrorCodes.UNREACHABLE_POS_PROVIDER);
+      throw new InternalServerError(TiqoErrorString(ctx, TiqoErrors.UNREACHABLE_POS_PROVIDER));
     }
 
     // By grouping the order items by orderReference, we optimize the number of access to the database.
@@ -392,14 +392,14 @@ export class ParrotPosAdapter {
         "lines",
       ]);
 
-      debug(
+      Debug(
         DebugAction.FOUND,
         `order ${orderReference} with ${currentOrder?.lines.length} lines`,
         ParrotPosAdapter.loggerCtx,
       );
 
       if (!currentOrder) {
-        debug(
+        Debug(
           DebugAction.DIDNT_FIND,
           `order ${orderReference}`,
           ParrotPosAdapter.loggerCtx,
@@ -407,14 +407,14 @@ export class ParrotPosAdapter {
         continue;
       }
 
-      debug(
+      Debug(
         DebugAction.EXECUTING,
         `order items sync for order #${orderReference}`,
         ParrotPosAdapter.loggerCtx,
       );
 
       for (const orderItem of groupedOrderItems[orderReference]) {
-        debug(
+        Debug(
           DebugAction.EXECUTING,
           `sync for order item #${orderItem.uuid}`,
           ParrotPosAdapter.loggerCtx,
@@ -425,7 +425,7 @@ export class ParrotPosAdapter {
             `Currency code mismatch for order item ${orderItem.uuid}: expected ${currentOrder.currencyCode}, got ${orderItem.currencyCode}`,
             ParrotPosAdapter.loggerCtx,
           );
-          throw new StandardError(TiqoErrorCodes.CURRENCY_CODE_MISMATCH);
+          throw new UnprocessableEntityException(TiqoErrorString(ctx, TiqoErrors.CURRENCY_CODE_MISMATCH));
         }
 
         const existingLine = currentOrder.lines.find(
@@ -433,7 +433,7 @@ export class ParrotPosAdapter {
         );
 
         if (existingLine) {
-          debug(
+          Debug(
             DebugAction.UPDATING,
             `order item #${orderItem.uuid} for order #${orderReference}`,
             ParrotPosAdapter.loggerCtx,
@@ -457,7 +457,7 @@ export class ParrotPosAdapter {
             customFields,
           );
         } else {
-          debug(
+          Debug(
             DebugAction.CREATING,
             `order item #${orderItem.uuid} for order #${orderReference}`,
             ParrotPosAdapter.loggerCtx,

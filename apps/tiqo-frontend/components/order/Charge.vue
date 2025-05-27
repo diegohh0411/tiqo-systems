@@ -1,13 +1,16 @@
 <template>
-  <div>
-    <h2>Charge</h2>
-    <p>Amount:</p>
-    <p>Status:</p>
+  <div ref="adyenCardContainer" />
+
+  <div v-if="response && response.errors">
+    <UAlert v-for="(error, index) in response.errors" :key="index" color="error" variant="outline" :description="error.message"/>
   </div>
 </template>
 
 <script setup lang="ts">
   import { graphql } from "~/codegen/gql";
+  import { AdyenCheckout, Card } from "@adyen/adyen-web";
+  import '@adyen/adyen-web/styles/adyen.css';
+
   const pfs = usePaymentFlowStore();
 
   const { mutate } = tMutation(
@@ -18,19 +21,42 @@
     `)
   )
 
-  mutate({
+  console.log(pfs.priceAfterTip)
+
+  const response = await mutate({
     input: {
       orderCode: pfs.order?.code || "",
-      selectedOrderlines: pfs.selectedOrderlines,
+      selectedQuantities: pfs.selectedQuantities,
       tipPercentage: pfs.percentageOfTip,
-      expectedChargeAmount: pfs.priceOfTip,
+      expectedChargeAmount: pfs.priceAfterTip,
     },
   })
-    .then((response) => {
-      console.log("Session created:", response);
-    })
-    .catch((error) => {
-      console.error("Error creating session:", error);
-    });
 
+  const adyenCardContainer = ref<HTMLDivElement | null>(null);
+
+  // Move Adyen initialization to onMounted
+  onMounted(async () => {
+    if (response?.data?.createAdyenSession && adyenCardContainer.value) {
+      const data = response.data.createAdyenSession;
+
+      const globalConfig = {
+        session: {
+          id: data.id,
+          sessionData: data.sessionData,
+        },
+        environment: "test" as const,
+        amount: data.amount,
+        locale: 'es-MX',
+        countryCode: 'MX',
+        clientKey: "test_W3BHRZD6TNBGFMSUAGGDHNCXSMVGIUFR"
+      }
+
+      const checkout = await AdyenCheckout(globalConfig);
+      console.log({checkout})
+
+      new Card(checkout, {}).mount(adyenCardContainer.value);
+    } else {
+      console.log(response)
+    }
+  });
 </script>

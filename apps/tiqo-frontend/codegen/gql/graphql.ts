@@ -419,7 +419,7 @@ export type CreateSessionInput = {
   customFields?: InputMaybe<Scalars['JSON']['input']>;
   expectedChargeAmount: Scalars['Float']['input'];
   orderCode: Scalars['String']['input'];
-  selectedOrderlines: Scalars['JSON']['input'];
+  selectedQuantities: Scalars['JSON']['input'];
   tipPercentage: Scalars['Float']['input'];
 };
 

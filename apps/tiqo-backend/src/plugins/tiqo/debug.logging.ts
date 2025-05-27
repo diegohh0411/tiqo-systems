@@ -7,13 +7,15 @@ export enum DebugAction {
   EXECUTING = "Executing",
   EXITING = "Exiting",
   ENDING_FUNCTION = "Ending function",
+  RESOLVING = "Resolving",
 
   DIDNT_FIND = "Did not find",
   FOUND = "Found",
   CALCULATING = "Calculating",
+  CALCULATED = "Calculated",
 }
 
-export const debug = (
+export const Debug = (
   debugAction: DebugAction,
   message: string,
   loggerCtx: string,
