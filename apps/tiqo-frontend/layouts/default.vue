@@ -2,7 +2,7 @@
   <div
   :class="`
     flex flex-col gap-6 items-center
-    min-h-screen h-full w-screen
+    min-h-screen h-full w-full
   `">
 
     <CoreNavigation />

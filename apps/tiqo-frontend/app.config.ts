@@ -10,7 +10,7 @@ export default defineAppConfig({
       variants: {
         size: {
           xl: {
-            base: 'p-3'
+            base: 'p-3 rounded-full'
           }
         }
       },

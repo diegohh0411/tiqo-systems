@@ -1,49 +1,52 @@
 <template>
-  <div class="grid lg:grid-cols-2 gap-6 lg:gap-12 h-[80svh]">
+  <div class="grid md:grid-cols-2 gap-12 h-[80svh]">
     <div class="flex flex-col gap-6 justify-center">
-      <h1>Cobra en segundos con Tiqo</h1>
-      <h3>El celular de tu comensal es tu nueva terminal</h3>
-
+      <h1 class="hero-title inline-block">{{ props.title }}</h1>
+      <h3>{{ props.subtitle }}</h3>
       <UButton
-        to="/demo"
-        trailing-icon="lucide-rocket"
-        class="rounded-full w-fit p-4"
+        :to="props.cta.to"
+        class="w-fit"
         size="xl"
       >
-        Ver demo
-      </UButton>
-
-      <UButton to="/interesado" variant="outline" trailing-icon="lucide-arrow-right" class="rounded-full w-fit p-4" size="xl">
-        Estoy interesado
+        {{ props.cta.text }}
       </UButton>
     </div>
 
-    <div class="overflow-hidden">
-      <NuxtImg src="/images/TacoNightWithFriends.png" class="w-full h-full object-cover rounded-3xl" />
+    <div>
+      <NuxtImg :src="props.image" class="w-full h-full object-cover rounded-3xl" />
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-  import { gsap } from 'gsap';
-  import { SplitText } from 'gsap/SplitText';
+  import { gsap, ScrollTrigger, SplitText } from 'gsap/all';
 
-  gsap.registerPlugin(SplitText);
+  const props = defineProps<{
+    title: string;
+    subtitle: string;
+    cta: {
+      to: string;
+      text: string;
+    },
+    // The source of the image to display in the hero section.
+    image: string;
+  }>();
+  
+  onMounted(() => {
+    gsap.registerPlugin(ScrollTrigger, SplitText);
 
-  if (import.meta.client) {
-    const splitText = new SplitText('h1', {
-      type: 'words',
-      wordsClass: 'word++',
+    SplitText.create(".hero-title", {
+      type: "words",
+      autoSplit: true,
+      onSplit: (self) => {
+        return gsap.from(self.words, {
+          y: -100,
+          opacity: 0,
+          rotation: "random(-80, 80)",
+          ease: "back",
+          stagger: 0.15
+        });
+      }
     });
-
-    gsap.from(
-      splitText.words,
-      {
-        y: '-2rem',
-        opacity: 0,
-        stagger: 0.1,
-        ease: "power2.out",
-      },
-    )
-  }
+  });
 </script>
