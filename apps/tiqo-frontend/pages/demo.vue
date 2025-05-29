@@ -2,8 +2,17 @@
   <div class="w-full max-w-lg mx-auto flex flex-col gap-6">
     <OrderHeader />
 
+    <UAlert 
+        v-if="pfs.stage === PaymentStages.SELECTING_ORDERLINES" 
+        icon="lucide-badge-info" 
+        type="info"
+        variant="subtle"
+        description="Selecciona los platillos que son tuyos, de entre todos los de la mesa."
+    />
+
     <OrderDetail
       v-if="pfs.stage === PaymentStages.SELECTING_ORDERLINES"
+      class="w-full"
       @continue="pfs.nextStage()"
     />
 

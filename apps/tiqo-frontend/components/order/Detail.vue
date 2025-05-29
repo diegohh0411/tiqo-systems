@@ -5,7 +5,7 @@
     v-if="pfs.order"
     :class="`
       grid grid-cols-7 gap-2 
-      w-full max-w-md
+      w-full
       rounded
       min-h-64
   `">

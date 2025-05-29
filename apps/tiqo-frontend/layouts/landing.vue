@@ -2,13 +2,15 @@
   <div
     ref="smoothWrapper"
   >
+    <LandingNavigation />
+
     <div
       ref="smoothContent"
       :class="`
+        relative
         flex flex-col gap-6 items-between
       `"
     >
-      <LandingNavigation />
 
       <div
         :class="`
