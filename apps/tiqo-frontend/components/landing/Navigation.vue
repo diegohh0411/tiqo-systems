@@ -9,9 +9,11 @@
         <UNavigationMenu :items="items" class="w-full justify-center" />
       </div>
 
+      <div
+        ref="ctaButton" 
+        class="z-50"
+      >
         <UButton
-          id="ctaButton"
-          class="z-50"
           to="/demo"
           size="xl"
           @mouseover="(e: Event) => animateOnHover(e.currentTarget)"
@@ -19,6 +21,7 @@
         >
           Ver demo
         </UButton>
+      </div>
     </div>
   </div>
 </template>
@@ -66,18 +69,27 @@
     }
   ])
 
+  const ctaButton = ref<HTMLElement | null>(null);
 
   onMounted(() => {
-    ScrollTrigger.create({
-      trigger: "#ctaButton",
-      start: "center center",
-      end: window.innerHeight,
-      scrub: true,
-      onUpdate: () => {
-        gsap.to("#ctaButton", { 
-          translateY: window.scrollY 
-        });
-      }
+    nextTick(() => {
+      ScrollTrigger.create({
+        trigger: ctaButton.value,
+        start: "center center",
+        end: window.innerHeight,
+        scrub: true,
+        onUpdate: () => {
+          gsap.to(ctaButton.value, { 
+            translateY: window.scrollY 
+          });
+        }
+      });
+    })
+  });
+
+  onUnmounted(() => {
+    ScrollTrigger.getAll().forEach(trigger => {
+      trigger.kill();
     });
   });
 

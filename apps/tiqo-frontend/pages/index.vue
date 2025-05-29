@@ -10,7 +10,20 @@
       image="/images/TacoNightWithFriends.png"
     />
 
-    <LandingSection title="Rotación más rápida de mesas" image="/images/dan-gold-E6HjQaB7UEA-unsplash.jpg" />
+    <LandingSection title="Rotación más rápida de mesas" image="/images/dan-gold-E6HjQaB7UEA-unsplash.jpg">
+      <p>Tus clientes piden y pagan sin esperar al mesero.</p>
+      <p>+15% en rotación de mesas significa más ventas por día.</p>
+    </LandingSection>
+
+    <LandingSection title="Más propinas, mejor servicio" image="/images/abiwin-krisna-qYrOqGunsQA-unsplash.jpg">
+      <p>Los clientes pueden dejar propina fácilmente desde su celular.</p>
+      <p>Tu equipo gana más y está más motivado.</p>
+    </LandingSection>
+
+    <LandingSection title="Ahorro de tiempo operativo" image="/images/jessie-mccall-guXX_Wm-wnY-unsplash.jpg">
+      <p>Ahorra tiempo en toma de pedidos y cobros.</p>
+      <p>El staff se enfoca en lo que importa: dar mejor servicio.</p>
+    </LandingSection>
   </div>
 </template>
 
