@@ -6,7 +6,9 @@
           <h3>Tiqo</h3>
         </UButton>
 
+        <!--
         <UNavigationMenu :items="items" class="w-full justify-center" />
+        -->
       </div>
 
       <div
@@ -27,11 +29,10 @@
 </template>
 
 <script lang="ts" setup>
-  import { gsap, ScrollTrigger } from 'gsap/all'
+  import { gsap, ScrollTrigger, Observer } from 'gsap/all'
   import type { NavigationMenuItem } from '@nuxt/ui'
-  gsap.registerPlugin(ScrollTrigger)
 
-  const items = ref<NavigationMenuItem[]>([
+  const _items = ref<NavigationMenuItem[]>([
     {
       label: '¿Cómo funciona?',
       icon: 'lucide-zap',
@@ -73,16 +74,19 @@
 
   onMounted(() => {
     nextTick(() => {
-      ScrollTrigger.create({
-        trigger: ctaButton.value,
-        start: "center center",
-        end: window.innerHeight,
-        scrub: true,
-        onUpdate: () => {
-          gsap.to(ctaButton.value, { 
-            translateY: window.scrollY 
-          });
-        }
+      gsap.registerPlugin(Observer)
+
+      const reposition = () => {
+        gsap.to(ctaButton.value, {
+          translateY: window.scrollY 
+        });
+      }
+
+      Observer.create({
+        target: window,
+        type: "wheel,touch,pointer",
+        onDown: reposition,
+        onUp: reposition,
       });
     })
   });

@@ -41,9 +41,13 @@
         content: smoothContent.value,
 
         smooth: 1,
-        smoothTouch: 0.1,
+        ignoreMobileResize: true,
+        normalizeScroll: true,
+
         effects: true,
-      });     
+      });
+
+      ScrollTrigger.refresh();
     })
   })
 </script>

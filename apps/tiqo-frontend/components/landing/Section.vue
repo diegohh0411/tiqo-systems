@@ -3,12 +3,12 @@
   ref="sectionRef"
   :class="`
     rounded-3xl
-    bg-neutral-50 dark:bg-neutral-900
+    bg-neutral-50 dark:bg-neutral-800
     grid lg:grid-cols-2 gap-6
     p-6 lg:p-12
     overflow-hidden
   `">
-    <div class="lg:p-0 flex flex-col gap-6 justify-center">
+    <div ref="leftSideRef" class="lg:p-0 flex flex-col gap-6 justify-center">
       <h1 ref="titleRef">{{ props.title }}</h1>
 
       <slot />
@@ -21,7 +21,7 @@
 </template>
 
 <script setup lang="ts">
-  import { gsap, ScrollTrigger, SplitText } from 'gsap/all'
+  import { gsap, ScrollTrigger, SplitText, ScrollSmoother } from 'gsap/all'
 
   const props = defineProps<{
     title: string;
@@ -30,27 +30,29 @@
 
   const sectionRef = ref<HTMLElement | null>(null)
   const titleRef = ref<HTMLElement | null>(null)
+  const leftSideRef = ref<HTMLElement | null>(null)
   const rightSideRef = ref<HTMLElement | null>(null)
 
   onMounted(() => {
-    gsap.registerPlugin(ScrollTrigger, SplitText)
-
     nextTick(() => {
+      gsap.registerPlugin(ScrollTrigger, SplitText, ScrollSmoother);
+
       const commonGsapConfig = {
         scrollTrigger: {
           trigger: sectionRef.value,
-          start: 'top center',
+          start: 'top 40%',
           end: 'center center',
           scrub: true,
         }
       }
 
       gsap.from(
-        rightSideRef.value,
+        leftSideRef.value?.querySelectorAll('p') ?? [],
         {
-          scale: 0.5,
-          y: "-100%",
-          ease: 'power4.inOut',
+          opacity: 0,
+          y: 100,
+          ease: 'power1.out',
+          stagger: 0.2,
           ...commonGsapConfig
         }
       )
@@ -70,7 +72,7 @@
                 {
                   opacity: 0,
                   x: 100,
-                  ease: 'power2.out',
+                  ease: 'power1.out',
                 }, i * 0.1
               )
             })
