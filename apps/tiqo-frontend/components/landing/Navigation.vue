@@ -70,6 +70,7 @@
     {
       label: 'Precios', 
       icon: 'lucide-dollar-sign',
+      to: '/pricing',
     }
   ])
 

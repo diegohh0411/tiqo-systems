@@ -7,6 +7,24 @@ const tl = gsap.timeline({
   }
 })
 
+export const useWaitForRefs = (...refs: Array<Ref<HTMLElement | null>>) => {
+  const ready = ref(false);
+
+  onMounted(async () => {
+    await nextTick();
+
+    const check = () => refs.every(ref => ref.value !== null);
+
+    while (!check()) {
+      await nextTick();
+    }
+
+    ready.value = true;
+  })
+
+  return { ready };
+}
+
 export const animateClick = (element: HTMLElement | EventTarget | null) => {
   if (!element) {
     return;

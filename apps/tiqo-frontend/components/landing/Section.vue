@@ -14,29 +14,35 @@
       <slot />
     </div>
 
-    <div ref="rightSideRef" class="row-start-1 lg:row-start-auto">
+    <div ref="rightSideRef" class="row-start-1 lg:row-start-auto z-10">
       <NuxtImg :src="props.image" class="w-full h-[50svh] lg:h-[70svh] object-cover rounded-3xl" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-  import { gsap, ScrollTrigger, SplitText, ScrollSmoother } from 'gsap/all'
-
   const props = defineProps<{
     title: string;
     image: string;
   }>()
+
+  const { gsap, SplitText } = useGsap()
+  let ctx: gsap.Context;
 
   const sectionRef = ref<HTMLElement | null>(null)
   const titleRef = ref<HTMLElement | null>(null)
   const leftSideRef = ref<HTMLElement | null>(null)
   const rightSideRef = ref<HTMLElement | null>(null)
 
-  onMounted(() => {
-    nextTick(() => {
-      gsap.registerPlugin(ScrollTrigger, SplitText, ScrollSmoother);
+  const { ready } = useWaitForRefs(
+    sectionRef,
+    titleRef,
+    leftSideRef,
+    rightSideRef
+  )
 
+  const animate = () => {
+    ctx = gsap.context(() => {
       const commonGsapConfig = {
         scrollTrigger: {
           trigger: sectionRef.value,
@@ -47,7 +53,7 @@
       }
 
       gsap.from(
-        leftSideRef.value?.querySelectorAll('p') ?? [],
+        leftSideRef.value?.querySelectorAll('p') || [],
         {
           opacity: 0,
           y: 100,
@@ -62,31 +68,30 @@
         {
           type: "words, chars",
           onSplit(self) {
-            const tl = gsap.timeline({
-              ...commonGsapConfig
-            })
-
-            self.words.forEach((char, i) => {
-              tl.from(
-                char,
-                {
-                  opacity: 0,
-                  x: 100,
-                  ease: 'power1.out',
-                }, i * 0.1
-              )
-            })
-
-            
+            gsap.from(
+              self.chars,
+              {
+                opacity: 0,
+                // x: 100,
+                y: '2rem',
+                ease: 'power1.out',
+                stagger: 0.05,
+                ...commonGsapConfig
+              }
+            )
           }
         }
       )
     })
+  }
+
+  watchEffect(() => {
+    if (ready.value) {
+      animate()
+    }
   })
 
   onUnmounted(() => {
-    ScrollTrigger.getAll().forEach(trigger => {
-      trigger.kill()
-    })
+    ctx.revert()
   })
 </script>

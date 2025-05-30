@@ -27,15 +27,13 @@
 </template>
 
 <script setup lang="ts">
-  import { gsap, ScrollSmoother, ScrollTrigger } from 'gsap/all';
+  const { ScrollSmoother, ScrollTrigger } = useGsap();
 
   const smoothWrapper = ref<HTMLElement | null>(null);
   const smoothContent = ref<HTMLElement | null>(null);
   
   onMounted(() => {
     nextTick(() => {
-      gsap.registerPlugin(ScrollSmoother, ScrollTrigger);
-
       ScrollSmoother.create({
         wrapper: smoothWrapper.value,
         content: smoothContent.value,
