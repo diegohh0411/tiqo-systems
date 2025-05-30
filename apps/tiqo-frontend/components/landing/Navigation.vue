@@ -3,14 +3,14 @@
     <div class="page-padding-x page-width flex gap-3 justify-between py-3">
       <div
         ref="leftSideRef" 
-        class="flex px-3 bg-white/20 rounded-3xl backdrop-blur backdrop-brightness-110"
+        class="flex gap-6 items-center px-3 bg-white/20 dark:bg-black/20 rounded-3xl backdrop-blur backdrop-brightness-110"
       >
-        <UButton variant="link" size="xl" to="/" class="w-fit px-0 mr-6">
+        <UButton variant="link" size="xl" to="/" class="w-fit px-0">
           <h3>Tiqo</h3>
         </UButton>
 
         
-        <UNavigationMenu :items="items" class="w-full justify-center" />
+        <UNavigationMenu :items="items" class="w-full justify-center hidden lg:block" />
         
       </div>
 

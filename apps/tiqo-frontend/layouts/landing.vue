@@ -7,11 +7,9 @@
     <div
       ref="smoothContent"
       :class="`
-        relative
         flex flex-col gap-6 items-between
       `"
     >
-
       <div
         :class="`
           flex flex-col gap-3
@@ -35,16 +33,14 @@
   const smoothContent = ref<HTMLElement | null>(null);
   
   onMounted(() => {
-    gsap.registerPlugin(ScrollSmoother, ScrollTrigger);
-
     nextTick(() => {
+      gsap.registerPlugin(ScrollSmoother, ScrollTrigger);
+
       ScrollSmoother.create({
         wrapper: smoothWrapper.value,
         content: smoothContent.value,
 
         smooth: 1,
-        ignoreMobileResize: true,
-        normalizeScroll: true,
 
         effects: true,
       });
