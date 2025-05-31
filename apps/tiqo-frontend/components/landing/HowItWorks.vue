@@ -9,7 +9,7 @@
       :class="`
         panel
         flex flex-col gap-6
-        h-96 w-full shrink-0 rounded-3xl surface p-6 overflow-hidden
+        h-96 w-full max-w-3xl shrink-0 rounded-3xl surface p-6 overflow-hidden
       `"
       >
         <h1>Paso {{ index + 1 }}</h1>
@@ -27,7 +27,7 @@
   const steps = [
     { text: 'El cliente escanea un QR en la mesa', icons: ['lucide-qr-code'] },
     { text: 'Accede al menú digital y ordena con el mesero', icons: ['lucide-hand-platter'] },
-    { text: 'Al terminar, el cliente paga desde su celular', icons: ['logos-mastercard', 'logos-visa', 'logos-google-pay', 'logos-apple-pay'] },
+    { text: 'Al terminar, el cliente paga desde su celular', icons: ['lucide-credit-card'] },
     { text: 'El mesero recibe una notificación y cierra la cuenta en el POS', icons: ['lucide-circle-check-big'] },
   ]
 
@@ -46,8 +46,8 @@
           scrollTrigger: {
             trigger: containerRef.value,
             start: 'center center',
-            end: '+=2000',
-            scrub: true,
+            end: '+=3000',
+            scrub: 1,
 
             pin: true,
           }

@@ -16,7 +16,9 @@
       image="/images/TacoNightWithFriends.png"
     />
 
-    <LandingHowItWorks />
+    <LandingHowItWorks id="como-funciona" />
+
+    <h1 id="beneficios">Beneficios</h1>
 
     <LandingSection title="Rotación más rápida de mesas" image="/images/dan-gold-E6HjQaB7UEA-unsplash.jpg">
       <p>Tus clientes piden y pagan sin esperar al mesero.</p>
@@ -38,5 +40,25 @@
 <script setup lang="ts">
   definePageMeta({
     layout: 'landing'
+  })
+
+  const { gsap } = useGsap()
+
+  const route = useRoute()
+
+  onMounted(() => {
+    watchEffect(() => {
+      if (route.hash) {
+        gsap.to(
+          window,
+          {
+            scrollTo: {
+              y: route.hash || 0,
+              offsetY: 100,
+            },
+          }
+        )
+      }
+    })
   })
 </script>

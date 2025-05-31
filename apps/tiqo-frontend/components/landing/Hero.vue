@@ -1,5 +1,5 @@
 <template>
-  <div class="grid md:grid-cols-2 gap-12 h-[80vh] overflow-hidden">
+  <div class="grid md:grid-cols-2 gap-12 h-[80vh] rounded-3xl overflow-hidden">
     <div class="flex flex-col gap-6 justify-center">
       <h1 ref="heroTitleRef" class="inline-block">{{ props.title }}</h1>
       <h3>{{ props.subtitle }}</h3>

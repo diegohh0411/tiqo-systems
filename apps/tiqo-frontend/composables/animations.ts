@@ -6,7 +6,8 @@ export const useGsap = () => {
     ScrollTrigger: nuxtApp.$ScrollTrigger,
     SplitText: nuxtApp.$SplitText,
     ScrollSmoother: nuxtApp.$ScrollSmoother,
-    Observer: nuxtApp.$Observer
+    Observer: nuxtApp.$Observer,
+    ScrollToPlugin: nuxtApp.$ScrollToPlugin
   }
 }
 
@@ -28,12 +29,12 @@ export const waitForRefs = (...refs: Array<Ref<HTMLElement | null>>) => {
   return { refsAreReady };
 }
 
-export const animateWhenRefsAreReady = (refs: Array<Ref<HTMLElement | null>>, animationCallback: () => void): Ref<typeof gsap.context> => {
+export const animateWhenRefsAreReady = (refs: Array<Ref<HTMLElement | null>>, animationCallback: () => void) => {
   const { refsAreReady } = waitForRefs(...refs);
 
   const { gsap } = useGsap();
 
-  const context = ref<typeof gsap.context | null>(null);
+  const context = ref<ReturnType<typeof gsap.context> | null>(null);
 
   watchEffect(() => {
     if (refsAreReady.value) {

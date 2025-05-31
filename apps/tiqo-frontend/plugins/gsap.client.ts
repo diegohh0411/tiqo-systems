@@ -1,8 +1,13 @@
 import { defineNuxtPlugin } from "#app";
-import { gsap, ScrollTrigger, SplitText, ScrollSmoother, Observer } from "gsap/all";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { SplitText } from "gsap/SplitText";
+import { ScrollSmoother } from "gsap/ScrollSmoother";
+import { Observer } from "gsap/Observer";
+import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 
 export default defineNuxtPlugin(() => {
-  gsap.registerPlugin(ScrollTrigger, SplitText, ScrollSmoother, Observer);
+  gsap.registerPlugin(ScrollTrigger, SplitText, ScrollSmoother, Observer, ScrollToPlugin);
 
   ScrollTrigger.defaults({
     pinSpacing: 'margin',
@@ -15,7 +20,8 @@ export default defineNuxtPlugin(() => {
       ScrollTrigger,
       SplitText,
       ScrollSmoother,
-      Observer
+      Observer,
+      ScrollToPlugin
     }
   }
 })

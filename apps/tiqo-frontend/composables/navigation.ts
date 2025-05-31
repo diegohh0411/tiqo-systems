@@ -4,39 +4,15 @@ export const useNavigationItems = (): Ref<NavigationMenuItem[]> => {
   const items = ref([
     {
       label: '¿Cómo funciona?',
-      icon: 'lucide-zap',
-      children: [
-        {
-          label: 'Beneficios hoy',
-          icon: 'lucide-trending-up',
-          description: 'Descubre cómo Tiqo mejora tu negocio',
-        },
-        {
-          label: 'Próximamente',
-          icon: 'lucide-calendar-plus',
-          description: 'Próximas funcionalidades que estamos desarrollando',
-        }
-      ]
+      icon: 'lucide-circle-help',
+      to: '/#como-funciona',
+      active: false
     },
     {
-      label: '¿Por qué Tiqo?',
-      icon: 'lucide-message-circle-question',
-      children: [
-        {
-          label: '¿Quienes somos?',
-          icon: 'lucide-smile',
-          description: 'Descubre nuestros rostros y nuestra motivación'
-        },
-        {
-          label: '¿Por qué elegir Tiqo?',
-          description: 'Conoce las ventajas de trabajar con nosotros'
-        }
-      ]
-    },
-    {
-      label: 'Precios',
-      icon: 'lucide-dollar-sign',
-      to: '/pricing',
+      label: 'Beneficios',
+      description: 'Descubre cómo Tiqo mejora la experiencia de tus clientes y aumenta tus ventas',
+      icon: 'lucide-chart-line',
+      to: '/#beneficios'
     }
   ]);
 
