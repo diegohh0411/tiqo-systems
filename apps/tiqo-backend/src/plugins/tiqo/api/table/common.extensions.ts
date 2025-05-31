@@ -7,7 +7,7 @@ export const tableCommonExtensions = gql`
 
   type Table {
     id: ID!
-    extName: String!
+    name: String!
 
     orders: [Order]!
   }

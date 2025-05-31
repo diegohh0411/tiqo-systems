@@ -1,7 +1,7 @@
 import { ID } from "@vendure/core";
 
 export interface CreateTableDto {
-  extName: string;
+  name: string;
   extId?: string;
 }
 
@@ -20,6 +20,6 @@ export interface DeleteTableDto {
 }
 
 export interface FindOneOrCreateItDto {
-  extName: string | null;
+  name: string | null;
   extId: string;
 }

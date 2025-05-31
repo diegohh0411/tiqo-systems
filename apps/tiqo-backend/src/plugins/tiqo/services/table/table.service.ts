@@ -22,7 +22,7 @@ export class TableService {
   async createTable(ctx: RequestContext, dto: CreateTableDto) {
     const repository = this.repository(ctx);
     const newTable = repository.create({
-      extName: dto.extName,
+      name: dto.name,
       extId: dto.extId,
       channels: [ctx.channel],
     });
@@ -113,7 +113,7 @@ export class TableService {
     );
     return await this.createTable(ctx, {
       extId: args.extId,
-      extName: args.extName || "Mesa sin nombre",
+      name: args.name || "Mesa sin nombre",
     });
   }
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="grid grid-cols-2 gap-x-2 gap-y-6">
+  <div class="grid grid-cols-4 gap-x-2 gap-y-6">
     <h2 class="col-span-full">Elige tu propina</h2>
     <p class="col-span-full">Seleccionaste {{ formatPrice(pfs.priceBeforeTip, pfs.order?.currencyCode) }}</p>
 

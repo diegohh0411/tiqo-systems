@@ -19,5 +19,12 @@ export const OrderFragment = graphql(`
       linePrice
       quantity
     }
+
+    customFields {
+      placedAt {
+        id
+        name
+      }
+    }
   }
 `)

@@ -6,7 +6,7 @@ const { result, loading, error } = useQuery(
     query ReadTables {
       readTables {
         id
-        extName
+        name
       }
     }
   `),
@@ -21,7 +21,7 @@ const tables = computed(() => result.value?.readTables.filter(t => !!t) || []);
     <p>{{ JSON.stringify({ result, loading, error }) }}</p>
 
     <NuxtLink v-for="table in tables" :key="table.id" :to="`table/${table?.id}`">
-      <h2>{{ table.extName }}</h2>
+      <h2>{{ table.name }}</h2>
     </NuxtLink>
   </div>
 </template>

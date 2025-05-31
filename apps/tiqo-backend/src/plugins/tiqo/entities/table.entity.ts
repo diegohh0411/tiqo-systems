@@ -20,7 +20,7 @@ import {
 
 import { UnprocessableEntityException } from "@nestjs/common";
 
-@Unique(["extName", "channelsAsString", "deletedAt"]) // This is to prevent the table from being created if it already exists. But still allows a new table to be created with the same name if the previous one was deleted.
+@Unique(["name", "channelsAsString", "deletedAt"]) // This is to prevent the table from being created if it already exists. But still allows a new table to be created with the same name if the previous one was deleted.
 @Entity()
 export class Table
   extends VendureEntity
@@ -33,7 +33,7 @@ export class Table
     comment: "The name of the table, used for display purposes.",
     nullable: false,
   })
-  extName: string;
+  name: string;
 
   @Column({
     comment: "The key of the table on the external POS system.",
@@ -64,7 +64,7 @@ export class Table
   @BeforeInsert()
   @BeforeUpdate()
   validateName() {
-    if (!this.extName) {
+    if (!this.name) {
       throw new UnprocessableEntityException(
         "The `name` property must never be empty.",
       );

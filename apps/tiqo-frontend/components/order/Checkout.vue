@@ -62,6 +62,14 @@
   import { AdyenCheckout, Card, type ICore } from "@adyen/adyen-web";
   import '@adyen/adyen-web/styles/adyen.css';
 
+  const props = defineProps<{
+    isDemo?: boolean;
+  }>()
+
+  const emit = defineEmits<{
+    (e: 'paymentCompleted'|'paymentFailed'): void;
+  }>();
+
   const pfs = usePaymentFlowStore();
   
   const adyenCardContainer = ref<HTMLDivElement | null>(null);
@@ -77,6 +85,13 @@
 
   const requestAdyenSession = async () => {
     pfs.loading = true;
+
+    if (props.isDemo) {
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      pfs.loading = false;
+      emit('paymentCompleted');
+      return;
+    }
 
     const response = await mutate({
       input: {

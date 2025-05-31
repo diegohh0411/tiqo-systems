@@ -13,7 +13,7 @@ const { result, loading, error } = useQuery(
     query ReadTable($id: ID!) {
       readTable(id: $id) {
         id
-        extName
+        name
         orders {
           id
           code

@@ -7,7 +7,7 @@
         icon="lucide-badge-info" 
         type="info"
         variant="subtle"
-        description="Selecciona los platillos que son tuyos, de entre todos los de la mesa."
+        description="Selecciona los platillos que sean tuyos, de entre todos los de la mesa."
     />
 
     <OrderDetail
@@ -18,7 +18,29 @@
 
     <OrderTip v-else-if="pfs.stage === PaymentStages.SELECTING_TIP" />
 
-    <OrderCheckout v-else-if="pfs.stage === PaymentStages.CAPTURING_PAYMENT" />
+    <OrderCheckout 
+        v-else-if="pfs.stage === PaymentStages.CAPTURING_PAYMENT" 
+        :is-demo="true"
+        @payment-completed="finalModalIsOpen = true" 
+    />
+
+    <UModal 
+        v-model:open="finalModalIsOpen" 
+        title="¡Gracias por probar nuestra demo!" 
+        description="¿Te gustó lo que viste? Déjanos tus datos y te contactaremos cuando nuestro producto esté listo para tu restaurante." close-icon="lucide-x">
+
+        
+        <template #body>
+            <UButton
+                class="w-full"                
+                color="primary"
+                trailing-icon="lucide-send"
+                to="/interesado"
+            >
+                Me interesa
+            </UButton>
+        </template>
+    </UModal>
 
   </div>
 </template>
@@ -126,6 +148,17 @@ import type { CurrencyCode } from '~/codegen/gql/graphql';
             "__typename": "OrderLine"
         }
     ],
+    "customFields": {
+        "placedAt": {
+            "id": "table-123",
+            "name": "1"
+        }
+    },
     "__typename": "Order"
   }
+
+
+  const finalModalIsOpen = ref(false);
+
+  
 </script>

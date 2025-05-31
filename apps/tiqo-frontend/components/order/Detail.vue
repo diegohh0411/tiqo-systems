@@ -9,8 +9,11 @@
       rounded
       min-h-64
   `">
-    <h3 class="col-span-full">Orden {{ pfs.order.code }}</h3>
-    <p class="col-span-full text-xs mb-6">{{ formatTime(pfs.order.updatedAt) }}</p>
+    <h3 class="col-span-full">Orden de la mesa {{ pfs.order.customFields?.placedAt?.name || '' }}</h3>
+    <div class="col-span-full flex gap-3 items-center justify-between mb-6 font-mono">
+      <p class="text-xs">Código: {{ pfs.order.code  }}</p>
+      <p class="text-xs">Actualizado el {{ formatTime(pfs.order.updatedAt) }}</p>
+    </div>
 
     <p class="col-span-1 col-start-1  font-bold">
       Ctd.
@@ -46,12 +49,12 @@
     />
     
     <div class="col-span-full ml-auto mt-3">
-      Total de la cuenta
+      Total seleccionado
     </div>
 
-    <div class="col-span-full ml-auto text-xl flex gap-3 justify-between">
+    <div class="col-span-full ml-auto flex gap-3 justify-between">
       <span>$</span>
-      <span>{{ formatPrice(pfs.order.totalWithTax) }}</span>
+      <span>{{ formatPrice(pfs.priceBeforeTip) }}</span>
       <span>{{ pfs.order.currencyCode }}</span>
     </div>
 
@@ -64,7 +67,7 @@
       trailing-icon="lucide-arrow-right"
       @click="pfs.nextStage()"
       >
-        Seleccionar {{ formatPrice(pfs.priceBeforeTip, pfs.order.currencyCode) }}
+        Continuar
     </UButton>
   </div>
 
