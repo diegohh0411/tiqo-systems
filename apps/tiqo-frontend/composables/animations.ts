@@ -5,7 +5,8 @@ export const useGsap = () => {
     gsap: nuxtApp.$gsap,
     ScrollTrigger: nuxtApp.$ScrollTrigger,
     SplitText: nuxtApp.$SplitText,
-    ScrollSmoother: nuxtApp.$ScrollSmoother
+    ScrollSmoother: nuxtApp.$ScrollSmoother,
+    Observer: nuxtApp.$Observer
   }
 }
 
@@ -33,7 +34,12 @@ export const animateClick = (element: HTMLElement | EventTarget | null) => {
   }
 
   const { gsap } = useGsap();
-  const tl = gsap.timeline();
+  const tl = gsap.timeline({
+    defaults: {
+      duration: 0.1,
+      ease: 'power4.out'
+    }
+  });
 
   tl.to(element, {
     scale: 0.98,

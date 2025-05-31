@@ -5,7 +5,13 @@
       subtitle="Con Tiqo, tus clientes pagan desde su celular en segundos. Tú vendes más con menos esfuerzo."
       :cta="{
         to: '/demo',
-        text: 'Ver demo'
+        text: 'Ver demo',
+        icon: 'lucide-zap'
+      }"
+      :sub="{
+        to: '/interesado',
+        text: 'Estoy interesado',
+        icon: 'lucide-send'
       }"
       image="/images/TacoNightWithFriends.png"
     />

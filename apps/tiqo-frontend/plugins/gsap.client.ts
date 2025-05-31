@@ -1,15 +1,16 @@
 import { defineNuxtPlugin } from "#app";
-import { gsap, ScrollTrigger, SplitText, ScrollSmoother } from "gsap/all";
+import { gsap, ScrollTrigger, SplitText, ScrollSmoother, Observer } from "gsap/all";
 
 export default defineNuxtPlugin(() => {
-  gsap.registerPlugin(ScrollTrigger, SplitText, ScrollSmoother);
+  gsap.registerPlugin(ScrollTrigger, SplitText, ScrollSmoother, Observer);
 
   return {
     provide: {
       gsap,
       ScrollTrigger,
       SplitText,
-      ScrollSmoother
+      ScrollSmoother,
+      Observer
     }
   }
 })

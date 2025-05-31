@@ -175,6 +175,9 @@ importers:
       '@tailwindcss/postcss':
         specifier: ^4.1.5
         version: 4.1.5
+      '@types/gsap':
+        specifier: ^3.0.0
+        version: 3.0.0
       typescript:
         specifier: 5.8.2
         version: 5.8.2
@@ -2369,6 +2372,10 @@ packages:
 
   '@types/googlepay@0.7.6':
     resolution: {integrity: sha512-5003wG+qvf4Ktf1hC9IJuRakNzQov00+Xf09pAWGJLpdOjUrq0SSLCpXX7pwSeTG9r5hrdzq1iFyZcW7WVyr4g==}
+
+  '@types/gsap@3.0.0':
+    resolution: {integrity: sha512-BbWLi4WRHGze4C8NV7U7yRevuBFiPkPZZyGa0rryanvh/9HPUFXTNBXsGQxJZJq7Ix7j4RXMYodP3s+OsqCErg==}
+    deprecated: This is a stub types definition. gsap provides its own type definitions, so you do not need this installed.
 
   '@types/http-errors@2.0.4':
     resolution: {integrity: sha512-D0CFMMtydbJAegzOyHjtiKPLlvnm3iTZyZRSZoLq2mRhDdmLfIWOCYPfQJ4cu2erKghU++QvjcUjp/5h7hESpA==}
@@ -10783,6 +10790,10 @@ snapshots:
       '@types/serve-static': 1.15.7
 
   '@types/googlepay@0.7.6': {}
+
+  '@types/gsap@3.0.0':
+    dependencies:
+      gsap: 3.13.0
 
   '@types/http-errors@2.0.4': {}
 

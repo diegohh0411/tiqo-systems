@@ -1,23 +1,36 @@
 <template>
-  <div 
-  :class="`
-    py-3 w-full
-  `">
-    <div
-    :class="`
-      flex gap-6 items-center
-      page-padding-x page-width
-    `">
-      <NuxtLink to="/" class="text-2xl font-bold">Tiqo</NuxtLink>
+  <div class="py-3 w-full">
+    <div class="page-padding-x page-width flex gap-3 items-center justify-between py-3">
+      <div
+        ref="leftSideRef" 
+        class="flex gap-6 items-center"
+      >
+        <UButton variant="link" size="xl" to="/" class="w-fit px-0">
+          <h3>Tiqo</h3>
+        </UButton>
+        
+        <UNavigationMenu :items="items" class="w-full justify-center hidden lg:block" />
+      </div>
 
-      <UNavigationMenu :items="items" class="justify-center hidden lg:block" />
+      <UButton
+        to="/demo"
+        size="xl"
+        icon="lucide-zap"
+        class="hidden lg:block"
+        @mouseover="(e: Event) => animateOnHover(e.currentTarget)"
+        @mouseleave="(e: Event) => animateOnLeave(e.currentTarget)"
+      >
+        Ver demo
+      </UButton>
+
+      <NavigationDrawer :items="items" />
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
   import type { NavigationMenuItem } from '@nuxt/ui'
-
+  
   const items = ref<NavigationMenuItem[]>([
     {
       label: '¿Cómo funciona?',
