@@ -3,7 +3,7 @@
   ref="sectionRef"
   :class="`
     rounded-3xl
-    bg-neutral-50 dark:bg-neutral-800
+    surface
     grid lg:grid-cols-2 gap-6
     p-6 lg:p-12
     overflow-hidden

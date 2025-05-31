@@ -28,6 +28,30 @@ export const waitForRefs = (...refs: Array<Ref<HTMLElement | null>>) => {
   return { refsAreReady };
 }
 
+export const animateWhenRefsAreReady = (refs: Array<Ref<HTMLElement | null>>, animationCallback: () => void): Ref<typeof gsap.context> => {
+  const { refsAreReady } = waitForRefs(...refs);
+
+  const { gsap } = useGsap();
+
+  const context = ref<typeof gsap.context | null>(null);
+
+  watchEffect(() => {
+    if (refsAreReady.value) {
+      context.value = gsap.context(() => animationCallback())
+    }
+  });
+
+  onUnmounted(() => {
+    console.debug(`Unmounting gsap context for current component.`);
+    if (context.value) {
+      context.value.revert();
+      context.value = null;
+    }
+  })
+
+  return context;
+}
+
 export const animateClick = (element: HTMLElement | EventTarget | null) => {
   if (!element) {
     return;

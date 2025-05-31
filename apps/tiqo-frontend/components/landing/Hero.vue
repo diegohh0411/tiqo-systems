@@ -1,5 +1,5 @@
 <template>
-  <div class="grid md:grid-cols-2 gap-12 h-[80svh]">
+  <div class="grid md:grid-cols-2 gap-12 h-[80vh] overflow-hidden">
     <div class="flex flex-col gap-6 justify-center">
       <h1 ref="heroTitleRef" class="inline-block">{{ props.title }}</h1>
       <h3>{{ props.subtitle }}</h3>
@@ -26,9 +26,7 @@
       </UButton>
     </div>
 
-    <div>
-      <NuxtImg :src="props.image" class="w-full h-full object-cover rounded-3xl" />
-    </div>
+    <NuxtImg :src="props.image" fit="cover" />      
   </div>
 </template>
 

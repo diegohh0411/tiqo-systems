@@ -6,7 +6,7 @@
       :cta="{
         to: '/demo',
         text: 'Ver demo',
-        icon: 'lucide-zap'
+        icon: 'lucide-joystick'
       }"
       :sub="{
         to: '/interesado',
@@ -15,6 +15,8 @@
       }"
       image="/images/TacoNightWithFriends.png"
     />
+
+    <LandingHowItWorks />
 
     <LandingSection title="Rotación más rápida de mesas" image="/images/dan-gold-E6HjQaB7UEA-unsplash.jpg">
       <p>Tus clientes piden y pagan sin esperar al mesero.</p>
