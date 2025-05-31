@@ -1,34 +1,39 @@
-import { gsap } from "gsap";
+export const useGsap = () => {
+  const nuxtApp = useNuxtApp();
 
-const tl = gsap.timeline({
-  defaults: {
-    duration: 0.1,
-    ease: 'power4.out'
+  return {
+    gsap: nuxtApp.$gsap,
+    ScrollTrigger: nuxtApp.$ScrollTrigger,
+    SplitText: nuxtApp.$SplitText,
+    ScrollSmoother: nuxtApp.$ScrollSmoother
   }
-})
+}
 
-export const useWaitForRefs = (...refs: Array<Ref<HTMLElement | null>>) => {
-  const ready = ref(false);
+export const waitForRefs = (...refs: Array<Ref<HTMLElement | null>>) => {
+  const refsAreReady = ref(false);
 
   onMounted(async () => {
     await nextTick();
 
-    const check = () => refs.every(ref => ref.value !== null);
+    const checkReferences = () => refs.every(ref => ref.value !== null);
 
-    while (!check()) {
+    while (!checkReferences()) {
       await nextTick();
     }
 
-    ready.value = true;
+    refsAreReady.value = true;
   })
 
-  return { ready };
+  return { refsAreReady };
 }
 
 export const animateClick = (element: HTMLElement | EventTarget | null) => {
   if (!element) {
     return;
   }
+
+  const { gsap } = useGsap();
+  const tl = gsap.timeline();
 
   tl.to(element, {
     scale: 0.98,
@@ -44,6 +49,8 @@ export const animateOnHover = (element: HTMLElement | EventTarget | null) => {
     return;
   }
 
+  const { gsap } = useGsap();
+
   gsap.to(element, {
     rotate: 1,
     scale: 1.15,
@@ -57,6 +64,8 @@ export const animateOnLeave = (element: HTMLElement | EventTarget | null) => {
   if (!element) {
     return;
   }
+
+  const { gsap } = useGsap();
 
   gsap.to(element, {
     rotate: 0,

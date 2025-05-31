@@ -5,10 +5,6 @@ export default defineNuxtConfig({
 
   css: ["~/assets/css/global.css"],
 
-  build: {
-    transpile: ["gsap"]
-  },
-
   postcss: {
     plugins: {
       "@tailwindcss/postcss": {},

@@ -10,7 +10,6 @@
   `">
     <div ref="leftSideRef" class="lg:p-0 flex flex-col gap-6 justify-center">
       <h1 ref="titleRef">{{ props.title }}</h1>
-
       <slot />
     </div>
 
@@ -34,7 +33,7 @@
   const leftSideRef = ref<HTMLElement | null>(null)
   const rightSideRef = ref<HTMLElement | null>(null)
 
-  const { ready } = useWaitForRefs(
+  const { refsAreReady } = waitForRefs(
     sectionRef,
     titleRef,
     leftSideRef,
@@ -86,7 +85,7 @@
   }
 
   watchEffect(() => {
-    if (ready.value) {
+    if (refsAreReady.value) {
       animate()
     }
   })
