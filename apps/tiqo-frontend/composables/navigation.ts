@@ -12,7 +12,13 @@ export const useNavigationItems = (): Ref<NavigationMenuItem[]> => {
       label: 'Beneficios',
       description: 'Descubre cómo Tiqo mejora la experiencia de tus clientes y aumenta tus ventas',
       icon: 'lucide-chart-line',
-      to: '/#beneficios'
+      to: '/#beneficios',
+      active: false,
+    },
+    {
+      label: 'Estoy interesado',
+      icon: 'lucide-hand',
+      to: '/interesado',
     }
   ]);
 

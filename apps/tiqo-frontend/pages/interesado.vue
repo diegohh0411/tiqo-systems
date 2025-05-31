@@ -56,7 +56,7 @@
       loading-auto
       type="submit"
       size="xl"
-      trailing-icon="lucide-arrow-right"
+      trailing-icon="lucide-send-horizontal"
       class="rounded-full w-fit"
     >
       <p>Enviar</p>

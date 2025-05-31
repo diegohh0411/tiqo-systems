@@ -34,6 +34,8 @@
       <p>Ahorra tiempo en toma de pedidos y cobros.</p>
       <p>El staff se enfoca en lo que importa: dar mejor servicio.</p>
     </LandingSection>
+
+    <LandingInterestedCta />
   </div>
 </template>
 
