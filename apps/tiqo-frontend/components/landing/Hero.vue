@@ -26,7 +26,7 @@
       </UButton>
     </div>
 
-    <NuxtImg :src="props.image" fit="cover" />      
+    <NuxtImg :src="props.image" class="w-full h-full object-cover rounded-3xl" />      
   </div>
 </template>
 
