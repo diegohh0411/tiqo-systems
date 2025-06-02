@@ -16,7 +16,9 @@
       image="/images/TacoNightWithFriends.png"
     />
 
-    <LandingHowItWorks id="como-funciona" />
+    <h1 id="como-funciona">¿Cómo funciona?</h1>
+
+    <LandingHowItWorks />
 
     <h1 id="beneficios">Beneficios</h1>
 
