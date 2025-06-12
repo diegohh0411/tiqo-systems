@@ -27,8 +27,10 @@
 </template>
 
 <script setup lang="ts">
+  /**
   const { ScrollSmoother, ScrollTrigger } = useGsap();
 
+  
   const smoothWrapper = ref<HTMLElement | null>(null);
   const smoothContent = ref<HTMLElement | null>(null);
   
@@ -49,4 +51,5 @@
       ScrollTrigger.refresh();
     })
   })
+  */
 </script>
