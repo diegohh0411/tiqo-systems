@@ -26,11 +26,13 @@
 
     <UModal 
         v-model:open="finalModalIsOpen" 
-        title="¡Gracias por probar nuestra demo!" 
-        description="¿Te gustó lo que viste? Déjanos tus datos y te contactaremos cuando nuestro producto esté listo para tu restaurante." close-icon="lucide-x">
+        title="¡Gracias!" 
+        close-icon="lucide-x">
 
         
         <template #body>
+            <p class="mb-6">¿Te gustó lo que viste? Déjanos tus datos y te contactaremos cuando nuestro producto esté listo para tu restaurante.</p>
+
             <UButton
                 class="w-full"                
                 color="primary"
