@@ -1,7 +1,7 @@
 <template>
   <div class="grid grid-cols-4 gap-x-2 gap-y-6">
     <h2 class="col-span-full">Elige tu propina</h2>
-    <p class="col-span-full">Seleccionaste {{ formatPrice(pfs.priceBeforeTip, pfs.order?.currencyCode) }}</p>
+    <p class="col-span-full">Es el porcentaje del total que seleccionaste ({{ formatPrice(pfs.priceBeforeTip, pfs.order?.currencyCode) }})</p>
 
     <UButton
       v-for="(percentage, index) in percentages"
@@ -74,7 +74,7 @@
 <script setup lang="ts">
   const pfs = usePaymentFlowStore();
 
-  const percentages = [0.25, 0.20, 0.15];
+  const percentages = [0.15, 0.20, 0.25];
 
   const showOtherPercentage = ref<boolean>(false);
 

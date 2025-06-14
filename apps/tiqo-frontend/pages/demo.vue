@@ -61,14 +61,14 @@ import type { CurrencyCode } from '~/codegen/gql/graphql';
             "id": "fe8e4340-7965-4a41-b7e0-671ef6d0a545",
             "customFields": {
                 "extId": "9f855f9a-2707-43a2-ba6f-99501cf2c0c1",
-                "extName": "Torrada de Arrachera",
+                "extName": "Orden de tacos",
                 "extSku": "TR-ARR-001",
-                "extUnitCost": 18500,
+                "extUnitCost": 10000,
                 "parentOrderlineId": null,
                 "hasBeenPaidFor": false,
                 "__typename": "OrderLineCustomFields"
             },
-            "linePrice": 18500,
+            "linePrice": 10000,
             "quantity": 1,
             "__typename": "OrderLine"
         },

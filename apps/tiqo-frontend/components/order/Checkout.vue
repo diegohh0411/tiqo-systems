@@ -33,6 +33,9 @@
       <p class="col-span-3 col-start-3">Propina <span class="opacity-50">({{ pfs.formattedPercentageOfTip }})</span></p>
       <p class="col-span-1">{{ formatPrice(pfs.priceOfTip, pfs.order?.currencyCode)  }}</p>
 
+      <p class="col-span-3 col-start-3">Servicio de Tiqo</p>
+      <div class="col-span-1 h-1 my-auto rounded-full bg-neutral-300 dark:bg-neutral-600 w-full" />
+
       <p class="col-span-3 col-start-3 font-bold">Total</p>
       <p class="col-span-1">{{ formatPrice(pfs.priceAfterTip, pfs.order?.currencyCode) }}</p>
     </div>

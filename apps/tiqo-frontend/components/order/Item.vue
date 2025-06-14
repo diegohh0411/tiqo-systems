@@ -14,13 +14,8 @@
     }"
   >
     <div class="col-span-1">x{{ props.quantity }}</div>
-    <div class="col-span-4">{{  props.name || 'Sin nombre' }}</div>
-    <div class="col-span-2 flex justify-between"><span>$</span>{{ formatPrice(props.unitCost * props.quantity) }}</div>
-
-    <template v-for="(childItem) in props.childItems" :key="childItem.uuid">
-      <div class="col-span-4 col-start-2 opacity-50">{{ childItem.name || 'Sin nombre' }}</div>
-      <div class="col-span-2 opacity-50 ml-auto"><span>+ {{ formatPrice(childItem.unitCost * childItem.quantity) }}</span></div>
-    </template>
+    <div class="col-span-3">{{  props.name || 'Sin nombre' }}</div>
+    <div class="col-span-3 flex justify-between"><span>$</span>{{ formatPrice(selectedPrice) }} /{{ formatPrice(collectivePrice) }}</div>
 
     <UInputNumber
       v-model="selectedQuantity"
@@ -48,6 +43,14 @@
       unitCost: number;
     }[];
   }>();
+
+  const selectedPrice = computed(() => {
+    return selectedQuantity.value / props.quantity * collectivePrice.value
+  })
+
+  const collectivePrice = computed(() => {
+    return props.unitCost + props.childItems.reduce((acc, item) => acc + (item.unitCost * item.quantity), 0);
+  })
 
   const orderline = ref<HTMLElement | null>(null);
 
